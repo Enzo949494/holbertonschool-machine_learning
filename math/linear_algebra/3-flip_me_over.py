@@ -1,21 +1,26 @@
 #!/usr/bin/env python3
-""""
-transpose matrix
 """
-
-
-import numpy as np
+Module to transpose a 2D matrix
+"""
 
 
 def matrix_transpose(matrix):
     """
-    Transpose of a 2D matrix
+    Returns the transpose of a 2D matrix
 
-    Args: matrix 2D
+    Args: 2D matrix
 
-    Returns: transposed matrix
+    Returns: The transposed matrix.
     """
+    rows = len(matrix)
+    cols = len(matrix[0])
 
-    np_matrix = np.array(matrix)
-    transposed = np_matrix.T
-    return transposed.tolist()
+    transposed = []
+
+    for c in range(cols):
+        new_row = []
+        for r in range(rows):
+            new_row.append(matrix[r][c])
+        transposed.append(new_row)
+
+    return transposed
