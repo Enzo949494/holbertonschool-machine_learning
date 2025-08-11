@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+curve a red line y 
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 
