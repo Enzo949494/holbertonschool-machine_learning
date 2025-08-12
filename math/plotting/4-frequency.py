@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-
+histogram students
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 def frequency():
     """
-
+    histogram students
     """
 
     np.random.seed(5)
