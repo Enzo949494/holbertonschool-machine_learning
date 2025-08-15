@@ -23,33 +23,38 @@ def poly_integral(poly, C=0):
         list :
             Nouvelle liste des coefficients représentant l'intégrale du
             polynôme.
-            Les coefficients entiers sont renvoyés comme int, sinon en float.
-            La liste est réduite au minimum (pas de zéros inutiles en fin).
+            Les coefficients entiers sont renvoyés comme int, sinon en 
+            float.
+            La liste est réduite au minimum (pas de zéros inutiles en 
+            fin).
 
         None :
             Si poly ou C ne sont pas valides.
     """
     # Vérification des types
     if (not isinstance(poly, list) or
-            not all(isinstance(c, (int, float)) for c in poly) or
             not isinstance(C, (int, float))):
         return None
-
-    # Cas particulier : polynôme vide
-    if len(poly) == 0:
-        return [int(C) if float(C).is_integer() else C]
+    
+    # Vérification que poly n'est pas vide
+    if not poly:
+        return None
+    
+    # Vérification que tous les éléments de poly sont int ou float
+    if not all(isinstance(c, (int, float)) for c in poly):
+        return None
 
     # Liste résultante commençant par la constante
-    res = [int(C) if float(C).is_integer() else C]
+    res = [int(C) if isinstance(C, int) or C.is_integer() else C]
 
     # Intégration terme par terme
     for i, coeff in enumerate(poly):
         val = coeff / (i + 1)
-        if float(val).is_integer():
+        if isinstance(val, float) and val.is_integer():
             val = int(val)
         res.append(val)
 
-    # Retirer les zéros de fin inutiles
+    # Retirer les zéros de fin inutiles (mais garder au moins un élément)
     while len(res) > 1 and res[-1] == 0:
         res.pop()
 
