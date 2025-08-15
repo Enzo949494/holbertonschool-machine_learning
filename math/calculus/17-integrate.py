@@ -23,9 +23,9 @@ def poly_integral(poly, C=0):
         list :
             Nouvelle liste des coefficients représentant l'intégrale du
             polynôme.
-            Les coefficients entiers sont renvoyés comme int, sinon en 
+            Les coefficients entiers sont renvoyés comme int, sinon en
             float.
-            La liste est réduite au minimum (pas de zéros inutiles en 
+            La liste est réduite au minimum (pas de zéros inutiles en
             fin).
 
         None :
@@ -35,11 +35,11 @@ def poly_integral(poly, C=0):
     if (not isinstance(poly, list) or
             not isinstance(C, (int, float))):
         return None
-    
+
     # Vérification que poly n'est pas vide
     if not poly:
         return None
-    
+
     # Vérification que tous les éléments de poly sont int ou float
     if not all(isinstance(c, (int, float)) for c in poly):
         return None
