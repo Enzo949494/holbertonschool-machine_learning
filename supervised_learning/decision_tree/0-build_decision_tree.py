@@ -5,9 +5,6 @@ decision tree build
 
 
 import numpy as np
-"""
-calculate deep of tree
-"""
 
 
 class Node:
@@ -23,6 +20,9 @@ class Node:
         self.depth = depth
 
     def max_depth_below(self):
+        """
+        calculate  the depth of a tree
+        """
         if self.left_child is None and self.right_child is None:
             return self.depth
 
