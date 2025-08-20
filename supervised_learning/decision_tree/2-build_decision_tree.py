@@ -106,10 +106,11 @@ class Node:
             str: Formatted text with right child prefix
         """
         lines = text.split("\n")
-        new_text = "    +---" + lines[0] + "\n"
+        new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += ("        " + x) + "\n"  # 8 espaces au lieu de 7
+            new_text += "       " + x + "\n"  # 7 espaces
         return new_text
+
 
     def __str__(self):
         """
