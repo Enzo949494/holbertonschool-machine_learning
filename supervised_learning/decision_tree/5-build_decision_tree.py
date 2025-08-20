@@ -199,7 +199,8 @@ class Node:
                 if self.lower[key] == -np.inf:
                     conditions.append(np.ones(x.shape[0], dtype=bool))
                 else:
-                    conditions.append(np.greater(x[:, key], self.lower[key]))
+                    conditions.append(
+                        np.greater(x[:, key], self.lower[key]))
 
             return np.all(np.array(conditions), axis=0)
 
@@ -222,11 +223,13 @@ class Node:
                 if self.upper[key] == np.inf:
                     conditions.append(np.ones(x.shape[0], dtype=bool))
                 else:
-                    conditions.append(np.less_equal(x[:, key], self.upper[key]))
+                    conditions.append(np.less_equal(x[:, key],
+                                                    self.upper[key]))
 
             return np.all(np.array(conditions), axis=0)
 
-        self.indicator = lambda x: np.all(np.array([is_large_enough(x), is_small_enough(x)]), axis=0)
+        self.indicator = lambda x: np.all(
+            np.array([is_large_enough(x), is_small_enough(x)]), axis=0)
 
 
 class Leaf(Node):
@@ -297,7 +300,7 @@ class Leaf(Node):
     def update_indicator(self):
         """
         Update the indicator function for this leaf.
-        
+
         Creates a function that determines if individuals satisfy
         the leaf's conditions based on lower and upper bounds.
         """
@@ -307,14 +310,15 @@ class Leaf(Node):
             """
             if not hasattr(self, 'lower') or not self.lower:
                 return np.ones(x.shape[0], dtype=bool)
-            
+
             conditions = []
             for key in self.lower.keys():
                 if self.lower[key] == -np.inf:
                     conditions.append(np.ones(x.shape[0], dtype=bool))
                 else:
-                    conditions.append(np.greater(x[:, key], self.lower[key]))
-            
+                    conditions.append(
+                        np.greater(x[:, key], self.lower[key]))
+
             return np.all(np.array(conditions), axis=0)
 
         def is_small_enough(x):
@@ -323,17 +327,19 @@ class Leaf(Node):
             """
             if not hasattr(self, 'upper') or not self.upper:
                 return np.ones(x.shape[0], dtype=bool)
-            
+
             conditions = []
             for key in self.upper.keys():
                 if self.upper[key] == np.inf:
                     conditions.append(np.ones(x.shape[0], dtype=bool))
                 else:
-                    conditions.append(np.less_equal(x[:, key], self.upper[key]))
-            
+                    conditions.append(
+                        np.less_equal(x[:, key], self.upper[key]))
+
             return np.all(np.array(conditions), axis=0)
 
-        self.indicator = lambda x: np.all(np.array([is_large_enough(x), is_small_enough(x)]), axis=0)
+        self.indicator = lambda x: np.all(np.array(
+            [is_large_enough(x), is_small_enough(x)]), axis=0)
 
 
 class Decision_Tree:
