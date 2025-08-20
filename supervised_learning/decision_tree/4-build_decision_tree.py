@@ -78,18 +78,18 @@ class Node:
             list: List of all leaf nodes below this node
         """
         leaves = []
-        
+
         if self.left_child is not None:
             leaves.extend(self.left_child.get_leaves_below())
         if self.right_child is not None:
             leaves.extend(self.right_child.get_leaves_below())
-            
+
         return leaves
 
     def update_bounds_below(self):
         """
         Update bounds for this node and all nodes below.
-        
+
         Calculates lower and upper bounds for each feature based on
         the decision tree structure.
         """
@@ -102,10 +102,10 @@ class Node:
                 # Initialize child bounds with parent bounds
                 child.upper = self.upper.copy()
                 child.lower = self.lower.copy()
-                
+
                 # Update bounds based on the split
                 if child == self.left_child:
-                    # Left child: feature > threshold  
+                    # Left child: feature > threshold
                     child.lower[self.feature] = self.threshold
                 else:
                     # Right child: feature <= threshold
