@@ -105,7 +105,6 @@ class Node:
         Returns:
             str: Formatted text with right child prefix
         """
-        lines = text.split("\n")
         lines = text.split('\n')
         new_text = "    +--->" + lines[0] + "\n"
         for x in lines[1:]:
@@ -187,7 +186,7 @@ class Leaf(Node):
         Returns:
             str: Leaf representation
         """
-        return f"-> leaf [value={self.value}]"
+        return f"leaf [value={self.value}]"
 
 
 class Decision_Tree():
