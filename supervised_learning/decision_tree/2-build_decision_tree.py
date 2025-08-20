@@ -107,7 +107,7 @@ class Node:
         """
         lines = text.split("\n")
         lines = text.split('\n')
-        new_text = "    +--->" + lines + "\n"
+        new_text = "    +--->" + lines[0] + "\n"
         for x in lines[1:]:
             new_text += "        " + x + "\n"  # 8 espaces !
         return new_text
