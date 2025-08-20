@@ -122,7 +122,7 @@ class Node:
             node_str = (f"root [feature={self.feature}, "
                         f"threshold={self.threshold}]")
         else:
-            node_str = (f"node [feature={self.feature}, "
+            node_str = (f"> node [feature={self.feature}, "
                         f"threshold={self.threshold}]")
 
         result = node_str
@@ -186,7 +186,7 @@ class Leaf(Node):
         Returns:
             str: Leaf representation
         """
-        return f"leaf [value={self.value}]"
+        return f"-> leaf [value={self.value}]"
 
 
 class Decision_Tree():
