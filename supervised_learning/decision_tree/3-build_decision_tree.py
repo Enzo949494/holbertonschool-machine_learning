@@ -6,6 +6,7 @@ This module provides classes to build and manage decision trees.
 
 import numpy as np
 
+
 class Node:
     """
     A node in a decision tree.
@@ -77,12 +78,12 @@ class Node:
             list: List of all leaf nodes below this node
         """
         leaves = []
-        
+
         if self.left_child is not None:
             leaves.extend(self.left_child.get_leaves_below())
         if self.right_child is not None:
             leaves.extend(self.right_child.get_leaves_below())
-            
+
         return leaves
 
     def left_child_add_prefix(self, text):
