@@ -4,6 +4,7 @@ Decision tree build module for machine learning.
 This module provides classes to build and manage decision trees.
 """
 
+import numpy as np
 
 class Node:
     """
