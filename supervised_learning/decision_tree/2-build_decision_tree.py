@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""
+Decision tree build module for machine learning.
+This module provides classes to build and manage decision trees.
+"""
+
 
 import numpy as np
 
@@ -103,7 +108,7 @@ class Node:
         lines = text.split('\n')
         new_text = "    +---> " + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += "           " + x + "\n"
+            new_text += "           " + x + "\n"  # 11 espaces !
         return new_text
 
     def __str__(self):
@@ -114,9 +119,11 @@ class Node:
             str: Tree structure as string
         """
         if self.is_root:
-            node_str = f"root [feature={self.feature}, threshold={self.threshold}]"
+            node_str = (f"root [feature={self.feature}, "
+                        f"threshold={self.threshold}]")
         else:
-            node_str = f"node [feature={self.feature}, threshold={self.threshold}]"
+            node_str = (f"node [feature={self.feature}, "
+                        f"threshold={self.threshold}]")
 
         result = node_str
 
@@ -241,4 +248,4 @@ class Decision_Tree():
         Returns:
             str: Tree structure as string
         """
-        return str(self.root)
+        return self.root.__str__()
