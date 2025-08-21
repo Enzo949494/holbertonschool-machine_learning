@@ -31,7 +31,7 @@ class Node:
 
     def max_depth_below(self):
         """
-        Calculate the maximum depth below this node.
+        Calculate the maximum depth below this
         """
         max_depth = self.depth
         if self.left_child is not None:
@@ -390,7 +390,7 @@ class Decision_Tree:
         left_population = node.sub_population.copy()
         right_population = node.sub_population.copy()
 
-        # CORRECTION: Left: feature > threshold, Right: feature <= threshold
+        # Left: feature > threshold, Right: feature <= threshold
         left_mask = feature_values > node.threshold
         right_mask = feature_values <= node.threshold
 
@@ -411,6 +411,11 @@ class Decision_Tree:
             node.left_child = self.get_leaf_child(node, left_population)
         else:
             node.left_child = self.get_node_child(node, left_population)
+            # AJOUTER: Mettre à jour les bornes pour l'enfant gauche
+            if hasattr(node, 'upper') and hasattr(node, 'lower'):
+                node.left_child.upper = node.upper.copy()
+                node.left_child.lower = node.lower.copy()
+                node.left_child.upper[node.feature] = node.threshold
             self.fit_node(node.left_child)
 
         # Check if right node should be a leaf
@@ -425,6 +430,11 @@ class Decision_Tree:
             node.right_child = self.get_leaf_child(node, right_population)
         else:
             node.right_child = self.get_node_child(node, right_population)
+            # AJOUTER: Mettre à jour les bornes pour l'enfant droit
+            if hasattr(node, 'upper') and hasattr(node, 'lower'):
+                node.right_child.upper = node.upper.copy()
+                node.right_child.lower = node.lower.copy()
+                node.right_child.lower[node.feature] = node.threshold
             self.fit_node(node.right_child)
 
     def get_leaf_child(self, node, sub_population):
@@ -435,6 +445,12 @@ class Decision_Tree:
         leaf_child = Leaf(value)
         leaf_child.depth = node.depth + 1
         leaf_child.sub_population = sub_population
+        
+        # Hériter des bornes mises à jour par fit_node
+        if hasattr(node, 'upper') and hasattr(node, 'lower'):
+            leaf_child.upper = node.upper.copy()
+            leaf_child.lower = node.lower.copy()
+        
         return leaf_child
 
     def get_node_child(self, node, sub_population):
