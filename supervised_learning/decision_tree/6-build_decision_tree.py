@@ -180,7 +180,7 @@ class Node:
         Creates a function that determines if individuals satisfy
         the node's conditions based on lower and upper bounds.
         """
-        
+
         def is_large_enough(x):
             """
             Check if individuals meet lower bound conditions.
@@ -204,7 +204,6 @@ class Node:
                         np.greater(x[:, key], self.lower[key]))
 
             return np.all(np.array(conditions), axis=0)
-        
 
         def is_small_enough(x):
             """
@@ -232,7 +231,7 @@ class Node:
 
         self.indicator = lambda x: np.all(
             np.array([is_large_enough(x), is_small_enough(x)]), axis=0)
-        
+
     def pred(self, x):
         """
         Predict class for a single sample using this node.
@@ -351,7 +350,7 @@ class Leaf(Node):
 
         self.indicator = lambda x: np.all(np.array(
             [is_large_enough(x), is_small_enough(x)]), axis=0)
-        
+
     def pred(self, x):
         """
         Predict class for a single sample using this leaf.
@@ -434,14 +433,14 @@ class Decision_Tree:
         leaves = self.get_leaves()
         for leaf in leaves:
             leaf.update_indicator()
-        
+
         def predict_function(A):
             predictions = np.zeros(A.shape[0])
             for leaf in leaves:
                 mask = leaf.indicator(A)
                 predictions[mask] = leaf.value
             return predictions.astype(int)
-        
+
         self.predict = predict_function
 
     def pred(self, x):
