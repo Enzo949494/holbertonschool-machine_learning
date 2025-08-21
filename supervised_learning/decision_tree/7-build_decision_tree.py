@@ -70,17 +70,12 @@ class Node:
         """
         Update bounds for this node and all nodes below.
         """
-        if self.is_root:
-            # Initialiser pour TOUTES les features
-            n_features = self.explanatory.shape[1] if hasattr(self, 'explanatory') else 10
-            self.upper = {i: np.inf for i in range(n_features)}
-            self.lower = {i: -np.inf for i in range(n_features)}
 
         for child in [self.left_child, self.right_child]:
             if child is not None:
                 child.upper = self.upper.copy()
                 child.lower = self.lower.copy()
-                
+
                 if child == self.left_child:
                     child.upper[self.feature] = self.threshold
                 else:
@@ -312,7 +307,7 @@ class Decision_Tree:
         n_features = self.explanatory.shape[1]
         self.root.upper = {i: np.inf for i in range(n_features)}
         self.root.lower = {i: -np.inf for i in range(n_features)}
-        
+
         self.root.update_bounds_below()
 
     def update_predict(self):
