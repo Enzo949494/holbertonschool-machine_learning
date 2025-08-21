@@ -308,8 +308,11 @@ class Decision_Tree:
         """
         Update bounds for all nodes in the tree.
         """
-        # Passer l'info sur le nombre de features à la racine
-        self.root.explanatory = self.explanatory
+        # Initialiser les bornes pour TOUTES les features à la racine
+        n_features = self.explanatory.shape[1]
+        self.root.upper = {i: np.inf for i in range(n_features)}
+        self.root.lower = {i: -np.inf for i in range(n_features)}
+        
         self.root.update_bounds_below()
 
     def update_predict(self):
