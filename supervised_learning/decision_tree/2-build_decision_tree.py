@@ -248,4 +248,4 @@ class Decision_Tree():
         Returns:
             str: Tree structure as string
         """
-        return self.root.__str__()
+        return self.root.__str__() + "\n"
