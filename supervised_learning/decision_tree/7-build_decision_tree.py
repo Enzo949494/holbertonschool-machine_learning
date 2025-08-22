@@ -71,8 +71,10 @@ class Node:
         Update bounds for this node and all nodes below.
         """
         if self.is_root:
-            self.upper = {0: np.inf}
-            self.lower = {0: -np.inf}
+            # Initialiser TOUTES les features, pas seulement la 0
+            max_features = 20  # Assez large pour couvrir tous les datasets
+            self.upper = {i: np.inf for i in range(max_features)}
+            self.lower = {i: -np.inf for i in range(max_features)}
 
         for child in [self.left_child, self.right_child]:
             if child is not None:
@@ -80,9 +82,9 @@ class Node:
                 child.lower = self.lower.copy()
 
                 if child == self.left_child:
-                    child.lower[self.feature] = self.threshold  # CORRIGER ICI
+                    child.lower[self.feature] = self.threshold
                 elif child == self.right_child:
-                    child.upper[self.feature] = self.threshold  # CORRIGER ICI
+                    child.upper[self.feature] = self.threshold
 
         for child in [self.left_child, self.right_child]:
             if child is not None:
@@ -313,6 +315,7 @@ class Decision_Tree:
         """
         Update the prediction function for the decision tree.
         """
+        self.update_bounds()  # RÉACTIVER cette ligne !
         leaves = self.get_leaves()
         for leaf in leaves:
             leaf.update_indicator()
