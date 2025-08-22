@@ -70,6 +70,9 @@ class Node:
         """
         Update bounds for this node and all nodes below.
         """
+        if self.is_root:
+            self.upper = {0: np.inf}
+            self.lower = {0: -np.inf}
 
         for child in [self.left_child, self.right_child]:
             if child is not None:
@@ -77,9 +80,9 @@ class Node:
                 child.lower = self.lower.copy()
 
                 if child == self.left_child:
-                    child.upper[self.feature] = self.threshold
-                else:
-                    child.lower[self.feature] = self.threshold
+                    child.lower[self.feature] = self.threshold  # CORRIGER ICI
+                elif child == self.right_child:
+                    child.upper[self.feature] = self.threshold  # CORRIGER ICI
 
         for child in [self.left_child, self.right_child]:
             if child is not None:
@@ -303,10 +306,6 @@ class Decision_Tree:
         """
         Update bounds for all nodes in the tree.
         """
-        # Initialiser les bornes pour TOUTES les features à la racine
-        n_features = self.explanatory.shape[1]
-        self.root.upper = {i: np.inf for i in range(n_features)}
-        self.root.lower = {i: -np.inf for i in range(n_features)}
 
         self.root.update_bounds_below()
 
@@ -314,7 +313,6 @@ class Decision_Tree:
         """
         Update the prediction function for the decision tree.
         """
-        self.update_bounds()
         leaves = self.get_leaves()
         for leaf in leaves:
             leaf.update_indicator()
@@ -385,72 +383,42 @@ class Decision_Tree:
         """
         node.feature, node.threshold = self.split_criterion(node)
 
-        # Split population based on threshold
-        feature_values = self.explanatory[:, node.feature][node.sub_population]
-        left_population = node.sub_population.copy()
-        right_population = node.sub_population.copy()
+        left_population = node.sub_population & (
+            self.explanatory[:, node.feature] > node.threshold)
+        right_population = node.sub_population & ~left_population
 
-        # Left: feature > threshold, Right: feature <= threshold
-        left_mask = feature_values > node.threshold
-        right_mask = feature_values <= node.threshold
-
-        # Update populations
-        indices = np.where(node.sub_population)[0]
-        left_population[indices[right_mask]] = False
-        right_population[indices[left_mask]] = False
-
-        # Check if left node should be a leaf
-        left_targets = self.target[left_population]
-        is_left_leaf = (
-            np.sum(left_population) <= self.min_pop or
-            node.depth + 1 >= self.max_depth or
-            len(np.unique(left_targets)) == 1
-        )
+        # Is left node a leaf?
+        is_left_leaf = (node.depth == self.max_depth - 1 or
+                        np.sum(left_population) <= self.min_pop or
+                        np.unique(self.target[left_population]).size == 1)
 
         if is_left_leaf:
             node.left_child = self.get_leaf_child(node, left_population)
         else:
             node.left_child = self.get_node_child(node, left_population)
-            # AJOUTER: Mettre à jour les bornes pour l'enfant gauche
-            if hasattr(node, 'upper') and hasattr(node, 'lower'):
-                node.left_child.upper = node.upper.copy()
-                node.left_child.lower = node.lower.copy()
-                node.left_child.upper[node.feature] = node.threshold
             self.fit_node(node.left_child)
 
-        # Check if right node should be a leaf
-        right_targets = self.target[right_population]
-        is_right_leaf = (
-            np.sum(right_population) <= self.min_pop or
-            node.depth + 1 >= self.max_depth or
-            len(np.unique(right_targets)) == 1
-        )
+        # Is right node a leaf?
+        is_right_leaf = (node.depth == self.max_depth - 1 or
+                         np.sum(right_population) <= self.min_pop or
+                         np.unique(self.target[right_population]).size == 1)
 
         if is_right_leaf:
             node.right_child = self.get_leaf_child(node, right_population)
         else:
             node.right_child = self.get_node_child(node, right_population)
-            # AJOUTER: Mettre à jour les bornes pour l'enfant droit
-            if hasattr(node, 'upper') and hasattr(node, 'lower'):
-                node.right_child.upper = node.upper.copy()
-                node.right_child.lower = node.lower.copy()
-                node.right_child.lower[node.feature] = node.threshold
             self.fit_node(node.right_child)
 
     def get_leaf_child(self, node, sub_population):
         """
         Create a leaf child.
         """
-        value = np.bincount(self.target[sub_population]).argmax()
+        target_values = self.target[sub_population]
+        values, counts = np.unique(target_values, return_counts=True)
+        value = values[np.argmax(counts)]
         leaf_child = Leaf(value)
         leaf_child.depth = node.depth + 1
         leaf_child.sub_population = sub_population
-        
-        # Hériter des bornes mises à jour par fit_node
-        if hasattr(node, 'upper') and hasattr(node, 'lower'):
-            leaf_child.upper = node.upper.copy()
-            leaf_child.lower = node.lower.copy()
-        
         return leaf_child
 
     def get_node_child(self, node, sub_population):
@@ -467,11 +435,4 @@ class Decision_Tree:
         Calculate accuracy.
         """
         predictions = self.predict(test_explanatory)
-        return (np.sum(np.equal(predictions, test_target)) /
-                test_target.size)
-
-    def __str__(self):
-        """
-        String representation of the tree.
-        """
-        return self.root.__str__()
+        return np.sum(np.equal(predictions, test_target)) / test_target.size
