@@ -448,10 +448,10 @@ class Decision_Tree:
     def Gini_split_criterion(self, node):
         """
         Find the best feature and threshold using Gini impurity criterion.
-        
+
         Args:
             node (Node): The node for which to find the best split.
-            
+
         Returns:
             tuple: The best feature index and threshold value.
         """
