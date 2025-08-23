@@ -387,66 +387,66 @@ class Decision_Tree:
         thresholds = self.possible_thresholds(node, feature)
         if len(thresholds) == 0:
             return 0, float('inf')
-        
+
         # Get feature values and targets for this node's population
         feature_values = self.explanatory[:, feature][node.sub_population]
         targets = self.target[node.sub_population]
-        
+
         # Get unique classes
         classes = np.unique(targets)
         n_classes = len(classes)
         n_samples = len(targets)
-        
+
         if n_samples == 0:
             return 0, float('inf')
-        
+
         # Create arrays for vectorized computation
         # Shape: (n_samples, n_thresholds)
         feature_values_expanded = feature_values[:, np.newaxis]
         thresholds_expanded = thresholds[np.newaxis, :]
-        
+
         # Boolean mask: True if sample goes to left child (feature > threshold)
         left_mask = feature_values_expanded > thresholds_expanded
-        
+
         best_threshold = thresholds[0]
         best_gini = float('inf')
-        
+
         for i, threshold in enumerate(thresholds):
             # Split populations
             left_indices = feature_values > threshold
             right_indices = ~left_indices
-            
+
             n_left = np.sum(left_indices)
             n_right = np.sum(right_indices)
-            
+
             if n_left == 0 or n_right == 0:
                 continue
-            
+
             # Calculate Gini for left child
             left_targets = targets[left_indices]
             left_gini = 1.0
             for class_val in classes:
                 p = np.sum(left_targets == class_val) / n_left
                 left_gini -= p * p
-            
+
             # Calculate Gini for right child
             right_targets = targets[right_indices]
             right_gini = 1.0
             for class_val in classes:
                 p = np.sum(right_targets == class_val) / n_right
                 right_gini -= p * p
-            
-            # Weighted average Gini
-            weighted_gini = (n_left / n_samples) * left_gini + (n_right / n_samples) * right_gini
-            
+
+            weighted_gini = ((n_left / n_samples) * left_gini +
+                             (n_right / n_samples) * right_gini)
+
             if weighted_gini < best_gini:
                 best_gini = weighted_gini
                 best_threshold = threshold
-        
+
         return best_threshold, best_gini
 
     def Gini_split_criterion(self, node):
-        X = np.array([self.Gini_split_criterion_one_feature(node, i) 
+        X = np.array([self.Gini_split_criterion_one_feature(node, i)
                       for i in range(self.explanatory.shape[1])])
         i = np.argmin(X[:, 1])
         return i, X[i, 0]
