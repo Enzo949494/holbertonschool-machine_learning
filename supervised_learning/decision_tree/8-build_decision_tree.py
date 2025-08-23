@@ -521,5 +521,15 @@ class Decision_Tree:
         return np.sum(np.equal(predictions, test_target)) / test_target.size
 
     def possible_thresholds(self, node, feature):
+        """
+        Calculate possible thresholds for splitting a feature.
+
+        Args:
+            node (Node): The node for which to calculate thresholds.
+            feature (int): The feature index to calculate thresholds for.
+
+        Returns:
+            numpy.ndarray: Array of possible threshold values.
+        """
         values = np.unique((self.explanatory[:, feature])[node.sub_population])
         return (values[1:] + values[:-1]) / 2
