@@ -446,6 +446,15 @@ class Decision_Tree:
         return best_threshold, best_gini
 
     def Gini_split_criterion(self, node):
+        """
+        Find the best feature and threshold using Gini impurity criterion.
+        
+        Args:
+            node (Node): The node for which to find the best split.
+            
+        Returns:
+            tuple: The best feature index and threshold value.
+        """
         X = np.array([self.Gini_split_criterion_one_feature(node, i)
                       for i in range(self.explanatory.shape[1])])
         i = np.argmin(X[:, 1])
