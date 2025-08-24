@@ -9,6 +9,22 @@ Decision_Tree = __import__('8-build_decision_tree').Decision_Tree
 
 
 class Random_Forest():
+    """
+    Random Forest classifier implementation.
+
+    A Random Forest is an ensemble learning method that constructs multiple
+    decision trees and outputs the class that is the mode of the classes
+    (classification) of the individual trees.
+
+    Attributes:
+        numpy_predicts (list): List to store predictions.
+        target (numpy.ndarray): Target values from training data.
+        numpy_preds (list): List of prediction functions from individual trees.
+        n_trees (int): Number of trees in the forest.
+        max_depth (int): Maximum depth of individual trees.
+        min_pop (int): Minimum population required to split a node.
+        seed (int): Random seed for reproducibility.
+    """
     def __init__(self, n_trees=100, max_depth=10, min_pop=1, seed=0):
         self.numpy_predicts = []
         self.target = None
