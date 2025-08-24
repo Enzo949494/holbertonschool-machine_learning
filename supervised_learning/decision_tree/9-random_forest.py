@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
-Decision_Tree = __import__('8-build_decision_tree').Decision_Tree
+"""
+Random Forest implementation for machine learning.
+This module provides a Random Forest classifier.
+"""
 import numpy as np
+
+Decision_Tree = __import__('8-build_decision_tree').Decision_Tree
+
 
 class Random_Forest():
     def __init__(self, n_trees=100, max_depth=10, min_pop=1, seed=0):
@@ -15,25 +21,25 @@ class Random_Forest():
     def predict(self, explanatory):
         """
         Predict classes using voting from all trees in the forest.
-        
+
         Args:
             explanatory (numpy.ndarray): Input features to predict.
-            
+
         Returns:
             numpy.ndarray: Predicted classes based on majority vote.
         """
         # Initialize an empty list to store predictions from individual trees
         all_predictions = []
-        
+
         # Generate predictions for each tree in the forest
         for tree_predict in self.numpy_preds:
             predictions = tree_predict(explanatory)
             all_predictions.append(predictions)
-        
+
         # Convert to numpy array for easier manipulation
         # Shape: (n_trees, n_samples)
         all_predictions = np.array(all_predictions)
-        
+
         # Calculate the mode (most frequent) prediction for each example
         # For each sample, find the most frequent prediction across all trees
         final_predictions = []
@@ -44,7 +50,7 @@ class Random_Forest():
             values, counts = np.unique(sample_predictions, return_counts=True)
             most_frequent = values[np.argmax(counts)]
             final_predictions.append(most_frequent)
-        
+
         return np.array(final_predictions)
 
     def fit(self, explanatory, target, n_trees=100, verbose=0):
@@ -56,8 +62,8 @@ class Random_Forest():
         leaves = []
         accuracies = []
         for i in range(n_trees):
-            T = Decision_Tree(max_depth=self.max_depth, min_pop=self.min_pop, 
-                            seed=self.seed+i)
+            T = Decision_Tree(max_depth=self.max_depth, min_pop=self.min_pop,
+                              seed=self.seed+i)
             T.fit(explanatory, target)
             self.numpy_preds.append(T.predict)
             depths.append(T.depth())
@@ -65,12 +71,14 @@ class Random_Forest():
             leaves.append(T.count_nodes(only_leaves=True))
             accuracies.append(T.accuracy(T.explanatory, T.target))
         if verbose == 1:
+            forest_accuracy = self.accuracy(self.explanatory, self.target)
             print(f"""  Training finished.
     - Mean depth                     : {np.array(depths).mean()}
     - Mean number of nodes           : {np.array(nodes).mean()}
     - Mean number of leaves          : {np.array(leaves).mean()}
     - Mean accuracy on training data : {np.array(accuracies).mean()}
-    - Accuracy of the forest on td   : {self.accuracy(self.explanatory, self.target)}""")
+    - Accuracy of the forest on td   : {forest_accuracy}""")
 
     def accuracy(self, test_explanatory, test_target):
-        return np.sum(np.equal(self.predict(test_explanatory), test_target))/test_target.size
+        predictions = self.predict(test_explanatory)
+        return np.sum(np.equal(predictions, test_target)) / test_target.size
