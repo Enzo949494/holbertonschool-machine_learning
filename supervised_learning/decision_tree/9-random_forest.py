@@ -106,5 +106,15 @@ class Random_Forest():
     - Accuracy of the forest on td   : {forest_accuracy}""")
 
     def accuracy(self, test_explanatory, test_target):
+        """
+        Calculate the accuracy of the Random Forest predictions.
+
+        Args:
+            test_explanatory (numpy.ndarray): Input features for testing.
+            test_target (numpy.ndarray): True target values for testing.
+
+        Returns:
+            float: Accuracy score as the ratio of correct predictions.
+        """
         predictions = self.predict(test_explanatory)
         return np.sum(np.equal(predictions, test_target)) / test_target.size
