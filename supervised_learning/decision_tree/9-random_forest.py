@@ -70,6 +70,16 @@ class Random_Forest():
         return np.array(final_predictions)
 
     def fit(self, explanatory, target, n_trees=100, verbose=0):
+        """
+        Train the Random Forest on the given dataset.
+
+        Args:
+            explanatory (numpy.ndarray): Input features for training.
+            target (numpy.ndarray): Target values for training.
+            n_trees (int, optional): Number of trees to create.Defaults to 100.
+            verbose (int, optional): Verbosity level. If 1, prints training
+                                   statistics. Defaults to 0.
+        """
         self.target = target
         self.explanatory = explanatory
         self.numpy_preds = []
