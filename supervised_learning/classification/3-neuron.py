@@ -22,7 +22,7 @@ class Neuron:
             raise TypeError("nx must be an integer")
         if nx < 1:
             raise ValueError("nx must be a positive integer")
-            
+
         # Initialize private weights using random normal distribution
         self.__W = np.random.normal(size=(1, nx))
         # Initialize private bias to 0
