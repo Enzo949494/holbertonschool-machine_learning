@@ -5,16 +5,17 @@ import numpy as np
 
 
 class NeuralNetwork:
-    """Class that defines a neural network with one hidden layer performing binary classification"""
+    """Class that defines a neural network with one
+       hidden layer performing binary classification"""
 
     def __init__(self, nx, nodes):
         """
         Constructor for NeuralNetwork class
-        
+
         Args:
             nx: number of input features
             nodes: number of nodes found in the hidden layer
-            
+
         Raises:
             TypeError: if nx is not an integer
             ValueError: if nx is less than 1
@@ -29,7 +30,7 @@ class NeuralNetwork:
             raise TypeError("nodes must be an integer")
         if nodes < 1:
             raise ValueError("nodes must be a positive integer")
-            
+
         # Initialize private attributes
         self.__W1 = np.random.normal(size=(nodes, nx))
         self.__b1 = np.zeros((nodes, 1))
@@ -71,21 +72,21 @@ class NeuralNetwork:
     def forward_prop(self, X):
         """
         Calculates the forward propagation of the neural network
-        
+
         Args:
             X: numpy.ndarray with shape (nx, m) that contains the input data
                nx is the number of input features to the neuron
                m is the number of examples
-               
+
         Returns:
             The private attributes __A1 and __A2, respectively
         """
         z1 = np.dot(self.__W1, X) + self.__b1
-        
+
         self.__A1 = 1 / (1 + np.exp(-z1))
-        
+
         z2 = np.dot(self.__W2, self.__A1) + self.__b2
-        
+
         self.__A2 = 1 / (1 + np.exp(-z2))
-        
+
         return self.__A1, self.__A2
