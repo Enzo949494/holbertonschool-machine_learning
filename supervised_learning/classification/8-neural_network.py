@@ -30,16 +30,10 @@ class NeuralNetwork:
         if nodes < 1:
             raise ValueError("nodes must be a positive integer")
             
-        # Initialize weights for hidden layer using random normal distribution
+        # Initialize weights and biases
         self.W1 = np.random.normal(size=(nodes, nx))
-        # Initialize bias for hidden layer with zeros
         self.b1 = np.zeros((nodes, 1))
-        # Initialize activated output for hidden layer to 0
         self.A1 = 0
-        
-        # Initialize weights for output neuron using random normal distribution
         self.W2 = np.random.normal(size=(1, nodes))
-        # Initialize bias for output neuron to 0
         self.b2 = 0
-        # Initialize activated output for output neuron (prediction) to 0
         self.A2 = 0
