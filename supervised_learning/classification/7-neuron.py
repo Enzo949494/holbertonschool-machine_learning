@@ -204,7 +204,7 @@ class Neuron:
             self.gradient_descent(X, Y, A, alpha)
 
             # Print and store cost every step iterations
-            if verbose and i % step == 0:
+            if verbose and (i % step == 0 or i == iterations):
                 cost = self.cost(Y, A)
                 print(f"Cost after {i} iterations: {cost}")
             if graph and i % step == 0:
