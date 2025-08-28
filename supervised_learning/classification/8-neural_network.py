@@ -10,11 +10,11 @@ class NeuralNetwork:
     def __init__(self, nx, nodes):
         """
         Constructor for NeuralNetwork class
-        
+
         Args:
             nx: number of input features
             nodes: number of nodes found in the hidden layer
-            
+
         Raises:
             TypeError: if nx is not an integer
             ValueError: if nx is less than 1
@@ -29,7 +29,7 @@ class NeuralNetwork:
             raise TypeError("nodes must be an integer")
         if nodes < 1:
             raise ValueError("nodes must be a positive integer")
-            
+
         # Initialize weights and biases
         self.W1 = np.random.normal(size=(nodes, nx))
         self.b1 = np.zeros((nodes, 1))
