@@ -160,17 +160,14 @@ class NeuralNetwork:
         # Get number of examples
         m = Y.shape[1]
         
-        # Calculate gradients for output layer
         dZ2 = A2 - Y
         dW2 = (1/m) * np.dot(dZ2, A1.T)
         db2 = (1/m) * np.sum(dZ2, axis=1, keepdims=True)
         
-        # Calculate gradients for hidden layer
         dZ1 = np.dot(self.__W2.T, dZ2) * A1 * (1 - A1)
         dW1 = (1/m) * np.dot(dZ1, X.T)
         db1 = (1/m) * np.sum(dZ1, axis=1, keepdims=True)
         
-        # Update weights and biases using gradient descent
         self.__W2 = self.__W2 - alpha * dW2
         self.__b2 = self.__b2 - alpha * db2
         self.__W1 = self.__W1 - alpha * dW1
