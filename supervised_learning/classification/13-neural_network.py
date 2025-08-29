@@ -80,16 +80,12 @@ class NeuralNetwork:
         Returns:
             The private attributes __A1 and __A2, respectively
         """
-        # Calculate the linear transformation for hidden layer: z1 = W1 * X + b1
         z1 = np.dot(self.__W1, X) + self.__b1
         
-        # Apply sigmoid activation function to hidden layer: A1 = 1 / (1 + e^(-z1))
         self.__A1 = 1 / (1 + np.exp(-z1))
-        
-        # Calculate the linear transformation for output layer: z2 = W2 * A1 + b2
+
         z2 = np.dot(self.__W2, self.__A1) + self.__b2
         
-        # Apply sigmoid activation function to output layer: A2 = 1 / (1 + e^(-z2))
         self.__A2 = 1 / (1 + np.exp(-z2))
         
         return self.__A1, self.__A2
