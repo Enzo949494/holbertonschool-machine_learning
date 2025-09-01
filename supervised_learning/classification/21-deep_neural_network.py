@@ -170,15 +170,12 @@ class DeepNeuralNetwork:
         for i in range(self.__L, 0, -1):
             A_prev = cache[f'A{i-1}']
 
-            # Calculate gradients for current layer
             dW = (1/m) * np.dot(dZ, A_prev.T)
             db = (1/m) * np.sum(dZ, axis=1, keepdims=True)
 
-            # Update weights and biases
             self.__weights[f'W{i}'] = self.__weights[f'W{i}'] - alpha * dW
             self.__weights[f'b{i}'] = self.__weights[f'b{i}'] - alpha * db
 
-            # Calculate dZ for previous layer (if not the first layer)
             if i > 1:
                 W = self.__weights[f'W{i}']
                 A_prev = cache[f'A{i-1}']
