@@ -136,7 +136,7 @@ class DeepNeuralNetwork:
 
         # Convert probabilities to binary predictions
         # 1 if A >= 0.5, 0 otherwise
-        predictions = (A >= 0.5).astype(int)
+        predictions = np.where(A >= 0.5, 1, 0)
 
         # Calculate the cost
         cost = self.cost(Y, A)
@@ -211,7 +211,6 @@ class DeepNeuralNetwork:
         if alpha <= 0:
             raise ValueError("alpha must be positive")
 
-        # Training loop
         for i in range(iterations):
             A, cache = self.forward_prop(X)
             self.gradient_descent(Y, cache, alpha)
