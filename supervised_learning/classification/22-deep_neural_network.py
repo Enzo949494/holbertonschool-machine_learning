@@ -136,7 +136,7 @@ class DeepNeuralNetwork:
 
         # Convert probabilities to binary predictions
         # 1 if A >= 0.5, 0 otherwise
-        predictions = np.where(A >= 0.5, 1, 0)
+        predictions = (A >= 0.5).astype(int)
 
         # Calculate the cost
         cost = self.cost(Y, A)
@@ -183,6 +183,24 @@ class DeepNeuralNetwork:
     def train(self, X, Y, iterations=5000, alpha=0.05):
         """
         Trains the deep neural network
+
+        Args:
+            X: numpy.ndarray with shape (nx, m) that contains the input data
+               nx is the number of input features to the neuron
+               m is the number of examples
+            Y: numpy.ndarray with shape (1, m) that contains the correct labels
+               for the input data
+            iterations: number of iterations to train over
+            alpha: the learning rate
+
+        Raises:
+            TypeError: if iterations is not an integer
+            ValueError: if iterations is not positive
+            TypeError: if alpha is not a float
+            ValueError: if alpha is not positive
+
+        Returns:
+            The evaluation of the training data after iterations of training
         """
         if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
@@ -193,11 +211,9 @@ class DeepNeuralNetwork:
         if alpha <= 0:
             raise ValueError("alpha must be positive")
 
-        # Training loop using while instead of for
-        i = 0
-        while i < iterations:
+        # Training loop
+        for i in range(iterations):
             A, cache = self.forward_prop(X)
             self.gradient_descent(Y, cache, alpha)
-            i += 1
 
         return self.evaluate(X, Y)
