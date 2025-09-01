@@ -213,10 +213,7 @@ class DeepNeuralNetwork:
 
         # Training loop
         for i in range(iterations):
-            # Forward propagation
             A, cache = self.forward_prop(X)
-            # Gradient descent
             self.gradient_descent(Y, cache, alpha)
 
-        # Return evaluation after training
         return self.evaluate(X, Y)
