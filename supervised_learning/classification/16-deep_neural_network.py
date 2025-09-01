@@ -44,8 +44,6 @@ class DeepNeuralNetwork:
             
             current_layer_size = layers[i]
             
-            # Initialize weights using He et al. method
             self.weights[f"W{i + 1}"] = np.random.randn(current_layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
             
-            # Initialize biases to zeros
             self.weights[f"b{i + 1}"] = np.zeros((current_layer_size, 1))
