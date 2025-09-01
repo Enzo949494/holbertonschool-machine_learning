@@ -162,7 +162,6 @@ class DeepNeuralNetwork:
         """
         m = Y.shape[1]
 
-        # Initialize gradient for output layer
         A_L = cache[f'A{self.__L}']
         dZ = A_L - Y
 
