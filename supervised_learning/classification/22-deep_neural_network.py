@@ -180,6 +180,24 @@ class DeepNeuralNetwork:
     def train(self, X, Y, iterations=5000, alpha=0.05):
         """
         Trains the deep neural network
+
+        Args:
+            X: numpy.ndarray with shape (nx, m) that contains the input data
+               nx is the number of input features to the neuron
+               m is the number of examples
+            Y: numpy.ndarray with shape (1, m) that contains the correct labels
+               for the input data
+            iterations: number of iterations to train over
+            alpha: the learning rate
+
+        Raises:
+            TypeError: if iterations is not an integer
+            ValueError: if iterations is not positive
+            TypeError: if alpha is not a float
+            ValueError: if alpha is not positive
+
+        Returns:
+            The evaluation of the training data after iterations of training
         """
         if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
@@ -190,13 +208,11 @@ class DeepNeuralNetwork:
         if alpha <= 0:
             raise ValueError("alpha must be positive")
 
-        for i in range(iterations):
+        # Training loop using while instead of for
+        iteration = 0
+        while iteration < iterations:
             A, cache = self.forward_prop(X)
             self.gradient_descent(Y, cache, alpha)
+            iteration += 1
 
-        # Faire un dernier forward_prop pour obtenir les résultats finaux
-        A, _ = self.forward_prop(X)
-        predictions = np.where(A >= 0.5, 1, 0)
-        cost = self.cost(Y, A)
-        
-        return predictions, cost
+        return self.evaluate(X, Y)
