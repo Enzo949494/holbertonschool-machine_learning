@@ -44,9 +44,9 @@ class DeepNeuralNetwork:
 
             current_layer_size = layers[i]
 
-            self.__weights[f"W{i + 1}"] = np.random.randn(current_layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
+            self.__weights["W" + str(i + 1)] = np.random.randn(current_layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
 
-            self.__weights[f"b{i + 1}"] = np.zeros((current_layer_size, 1))
+            self.__weights["b" + str(i + 1)] = np.zeros((current_layer_size, 1))
 
     @property
     def L(self):
@@ -81,11 +81,11 @@ class DeepNeuralNetwork:
         # Forward propagation through all layers
         A = X
         for i in range(1, self.__L + 1):
-            W = self.__weights[f'W{i}']
-            b = self.__weights[f'b{i}']
+            W = self.__weights["W" + str(i)]
+            b = self.__weights["b" + str(i)]
             Z = np.dot(W, A) + b
             A = 1 / (1 + np.exp(-Z))
-            self.__cache[f'A{i}'] = A
+            self.__cache["A" + str(i)] = A
 
         return A, self.__cache
 
@@ -133,7 +133,7 @@ class DeepNeuralNetwork:
 
         # Convert probabilities to binary predictions
         # 1 if A >= 0.5, 0 otherwise
-        predictions = np.where(A >= 0.5, 1, 0)
+        predictions = (A >= 0.5).astype(int)
 
         # Calculate the cost
         cost = self.cost(Y, A)
@@ -154,27 +154,27 @@ class DeepNeuralNetwork:
         """
         m = Y.shape[1]
 
-        A_L = cache[f'A{self.__L}']
+        A_L = cache["A" + str(self.__L)]
         dZ = A_L - Y
 
         # Backward propagation through all layers using one loop
         for i in range(self.__L, 0, -1):
-            A_prev = cache[f'A{i-1}']
+            A_prev = cache["A" + str(i-1)]
 
             dW = (1/m) * np.dot(dZ, A_prev.T)
             db = (1/m) * np.sum(dZ, axis=1, keepdims=True)
 
             # Save W before update for backpropagation
             if i > 1:
-                W_current = self.__weights[f'W{i}'].copy()
+                W_current = self.__weights["W" + str(i)].copy()
 
             # Update weights and biases
-            self.__weights[f'W{i}'] = self.__weights[f'W{i}'] - alpha * dW
-            self.__weights[f'b{i}'] = self.__weights[f'b{i}'] - alpha * db
+            self.__weights["W" + str(i)] = self.__weights["W" + str(i)] - alpha * dW
+            self.__weights["b" + str(i)] = self.__weights["b" + str(i)] - alpha * db
 
             # Calculate dZ for previous layer using weights before update
             if i > 1:
-                A_prev = cache[f'A{i-1}']
+                A_prev = cache["A" + str(i-1)]
                 dZ = np.dot(W_current.T, dZ) * A_prev * (1 - A_prev)
 
     def train(self, X, Y, iterations=5000, alpha=0.05):
