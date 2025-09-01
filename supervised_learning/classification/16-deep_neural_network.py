@@ -30,12 +30,10 @@ class DeepNeuralNetwork:
         if not all(isinstance(layer, int) and layer > 0 for layer in layers):
             raise TypeError("layers must be a list of positive integers")
             
-        # Set public instance attributes
         self.L = len(layers)
         self.cache = {}
         self.weights = {}
         
-        # Initialize weights and biases
         for i in range(self.L):
             if i == 0:
                 prev_layer_size = nx
