@@ -86,17 +86,14 @@ class DeepNeuralNetwork:
         # Forward propagation through all layers
         A = X
         for i in range(1, self.__L + 1):
-            # Get weights and biases for current layer
+
             W = self.__weights[f'W{i}']
             b = self.__weights[f'b{i}']
 
-            # Calculate linear transformation: Z = W * A + b
             Z = np.dot(W, A) + b
 
-            # Apply sigmoid activation function: A = 1 / (1 + e^(-Z))
             A = 1 / (1 + np.exp(-Z))
 
-            # Save activated output to cache
             self.__cache[f'A{i}'] = A
 
         return A, self.__cache
