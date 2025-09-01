@@ -2,7 +2,7 @@
 """Module for DeepNeuralNetwork class"""
 
 import numpy as np
-np.set_printoptions(precision=8, suppress=True, linewidth=75, threshold=1000)
+np.set_printoptions(precision=8, edgeitems=3, linewidth=80, suppress=True)
 
 
 class DeepNeuralNetwork:
