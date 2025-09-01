@@ -164,9 +164,8 @@ class DeepNeuralNetwork:
             dW = (1/m) * np.dot(dZ, A_prev.T)
             db = (1/m) * np.sum(dZ, axis=1, keepdims=True)
 
-            # Save W before update for backpropagation
-            if i > 1:
-                W_current = self.__weights[f'W{i}'].copy()
+            # Save W before update for backpropagation (pour toutes les couches)
+            W_current = self.__weights[f'W{i}'].copy()
 
             # Update weights and biases
             self.__weights[f'W{i}'] = self.__weights[f'W{i}'] - alpha * dW
