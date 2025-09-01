@@ -172,10 +172,15 @@ class DeepNeuralNetwork:
             dW = (1/m) * np.dot(dZ, A_prev.T)
             db = (1/m) * np.sum(dZ, axis=1, keepdims=True)
 
+            # IMPORTANT: Sauvegarder W avant la mise à jour pour la rétropropagation
+            if i > 1:
+                W_current = self.__weights[f'W{i}'].copy()
+
+            # Mettre à jour les poids et biais
             self.__weights[f'W{i}'] = self.__weights[f'W{i}'] - alpha * dW
             self.__weights[f'b{i}'] = self.__weights[f'b{i}'] - alpha * db
 
+            # Calculer dZ pour la couche précédente avec les poids AVANT mise à jour
             if i > 1:
-                W = self.__weights[f'W{i}']
                 A_prev = cache[f'A{i-1}']
-                dZ = np.dot(W.T, dZ) * A_prev * (1 - A_prev)
+                dZ = np.dot(W_current.T, dZ) * A_prev * (1 - A_prev)
