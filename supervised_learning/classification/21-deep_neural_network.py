@@ -155,7 +155,7 @@ class DeepNeuralNetwork:
         Args:
             Y: numpy.ndarray with shape (1, m) that contains the correct labels
                for the input data
-            cache: dictionary containing all the intermediary values of the network
+            cache: dictionary contain all the intermediary value of the network
             alpha: the learning rate
 
         Updates the private attribute __weights
@@ -172,7 +172,7 @@ class DeepNeuralNetwork:
             dW = (1/m) * np.dot(dZ, A_prev.T)
             db = (1/m) * np.sum(dZ, axis=1, keepdims=True)
 
-            # IMPORTANT: Sauvegarder W avant la mise à jour pour la rétropropagation
+            # IMPORTANT: Sauvegarder W avant la mise à jour pour la rétropropag
             if i > 1:
                 W_current = self.__weights[f'W{i}'].copy()
 
@@ -180,7 +180,7 @@ class DeepNeuralNetwork:
             self.__weights[f'W{i}'] = self.__weights[f'W{i}'] - alpha * dW
             self.__weights[f'b{i}'] = self.__weights[f'b{i}'] - alpha * db
 
-            # Calculer dZ pour la couche précédente avec les poids AVANT mise à jour
+            # Calculer dZ pour la couche précédente avec les poids AVANT MAJ
             if i > 1:
                 A_prev = cache[f'A{i-1}']
                 dZ = np.dot(W_current.T, dZ) * A_prev * (1 - A_prev)
