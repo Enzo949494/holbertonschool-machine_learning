@@ -38,10 +38,8 @@ class DeepNeuralNetwork:
         # Initialize weights and biases
         for i in range(self.L):
             if i == 0:
-                # First layer connects to input features
                 prev_layer_size = nx
             else:
-                # Subsequent layers connect to previous layer
                 prev_layer_size = layers[i - 1]
             
             current_layer_size = layers[i]
