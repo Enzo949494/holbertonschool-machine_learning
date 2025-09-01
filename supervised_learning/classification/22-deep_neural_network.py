@@ -164,8 +164,9 @@ class DeepNeuralNetwork:
             dW = (1/m) * np.dot(dZ, A_prev.T)
             db = (1/m) * np.sum(dZ, axis=1, keepdims=True)
 
-            # Save W before update for backpropagation (pour toutes les couches)
-            W_current = self.__weights[f'W{i}'].copy()
+            # Save W before update for backpropagation
+            if i > 1:
+                W_current = self.__weights[f'W{i}'].copy()
 
             # Update weights and biases
             self.__weights[f'W{i}'] = self.__weights[f'W{i}'] - alpha * dW
@@ -179,24 +180,6 @@ class DeepNeuralNetwork:
     def train(self, X, Y, iterations=5000, alpha=0.05):
         """
         Trains the deep neural network
-
-        Args:
-            X: numpy.ndarray with shape (nx, m) that contains the input data
-               nx is the number of input features to the neuron
-               m is the number of examples
-            Y: numpy.ndarray with shape (1, m) that contains the correct labels
-               for the input data
-            iterations: number of iterations to train over
-            alpha: the learning rate
-
-        Raises:
-            TypeError: if iterations is not an integer
-            ValueError: if iterations is not positive
-            TypeError: if alpha is not a float
-            ValueError: if alpha is not positive
-
-        Returns:
-            The evaluation of the training data after iterations of training
         """
         if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
@@ -211,4 +194,9 @@ class DeepNeuralNetwork:
             A, cache = self.forward_prop(X)
             self.gradient_descent(Y, cache, alpha)
 
-        return self.evaluate(X, Y)
+        # Faire un dernier forward_prop pour obtenir les résultats finaux
+        A, _ = self.forward_prop(X)
+        predictions = np.where(A >= 0.5, 1, 0)
+        cost = self.cost(Y, A)
+        
+        return predictions, cost
