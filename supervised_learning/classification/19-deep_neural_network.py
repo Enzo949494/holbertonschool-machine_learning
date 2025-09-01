@@ -86,7 +86,6 @@ class DeepNeuralNetwork:
         # Forward propagation through all layers
         A = X
         for i in range(1, self.__L + 1):
-            # Get weights and biases for current layer
             W = self.__weights[f'W{i}']
             b = self.__weights[f'b{i}']
 
