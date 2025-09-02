@@ -11,6 +11,16 @@ class DeepNeuralNetwork:
     def __init__(self, nx, layers):
         """
         Constructor for DeepNeuralNetwork class
+
+        Args:
+            nx: number of input features
+            layers: list representing the number of nodes in each layer
+
+        Raises:
+            TypeError: if nx is not an integer
+            ValueError: if nx is less than 1
+            TypeError: if layers is not a list
+            TypeError: if elements in layers are not positive integers
         """
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
@@ -23,20 +33,20 @@ class DeepNeuralNetwork:
         self.__cache = {}
         self.__weights = {}
 
-        # Validation et initialisation en une seule boucle
         for i in range(self.__L):
             if not isinstance(layers[i], int) or layers[i] <= 0:
                 raise TypeError("layers must be a list of positive integers")
 
-            prev_layer_size = nx if i == 0 else layers[i - 1]
+            if i == 0:
+                prev_layer_size = nx
+            else:
+                prev_layer_size = layers[i - 1]
+
             current_layer_size = layers[i]
 
-            # Initialisation directe sans réassignation multiple
-            key_w = "W" + str(i + 1)
-            key_b = "b" + str(i + 1)
-            
-            self.__weights[key_w] = np.random.randn(current_layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
-            self.__weights[key_b] = np.zeros((current_layer_size, 1))
+            self.__weights[f"W{i + 1}"] = np.random.randn(current_layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
+
+            self.__weights[f"b{i + 1}"] = np.zeros((current_layer_size, 1))
 
     @property
     def L(self):
