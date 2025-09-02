@@ -44,7 +44,10 @@ class DeepNeuralNetwork:
 
             current_layer_size = layers[i]
 
-            self.__weights[f"W{i + 1}"] = np.random.randn(current_layer_size, prev_layer_size) * np.sqrt(2 / prev_layer_size)
+            weight_init = np.random.randn(current_layer_size, prev_layer_size)
+            weight_key = f"W{i + 1}"
+            scale = np.sqrt(2 / prev_layer_size)
+            self.__weights[weight_key] = weight_init * scale
 
             self.__weights[f"b{i + 1}"] = np.zeros((current_layer_size, 1))
 
@@ -146,8 +149,9 @@ class DeepNeuralNetwork:
 
         Args:
             Y: numpy.ndarray with shape (1, m) that contains the correct labels
-               for the input data
-            cache: dictionary containing all the intermediary values of the network
+               for the input data.
+            cache: dictionary containing all the
+                   intermediary values of the network.
             alpha: the learning rate
 
         Updates the private attribute __weights
@@ -162,12 +166,9 @@ class DeepNeuralNetwork:
             A_prev = cache[f'A{i-1}']
 
             W_current = self.__weights[f'W{i}'].copy()
-            
+
             dW = (1/m) * np.dot(dZ, A_prev.T)
             db = (1/m) * np.sum(dZ, axis=1, keepdims=True)
-
-            # Save W before update for backpropagation
-
 
             # Update weights and biases
             self.__weights[f'W{i}'] = self.__weights[f'W{i}'] - alpha * dW
