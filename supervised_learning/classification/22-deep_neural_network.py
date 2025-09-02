@@ -175,7 +175,6 @@ class DeepNeuralNetwork:
 
             # Calculate dZ for previous layer using weights before update
             if i > 1:
-                A_prev = cache[f'A{i-1}']
                 dZ = np.dot(W_current.T, dZ) * A_prev * (1 - A_prev)
 
     def train(self, X, Y, iterations=5000, alpha=0.05):
