@@ -26,13 +26,13 @@ def one_hot_encode(Y, classes):
         return None
 
     m = Y.shape[0]
-    
+
     # Create one-hot matrix with shape (classes, m)
     one_hot = np.zeros((classes, m))
-    
+
     # Set appropriate positions to 1
     # Y[i] gives the class for example i
     # So we set one_hot[Y[i], i] = 1
     one_hot[Y, np.arange(m)] = 1
-    
+
     return one_hot
