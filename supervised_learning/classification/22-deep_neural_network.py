@@ -161,12 +161,13 @@ class DeepNeuralNetwork:
         for i in range(self.__L, 0, -1):
             A_prev = cache[f'A{i-1}']
 
+            W_current = self.__weights[f'W{i}'].copy()
+            
             dW = (1/m) * np.dot(dZ, A_prev.T)
             db = (1/m) * np.sum(dZ, axis=1, keepdims=True)
 
             # Save W before update for backpropagation
-            if i > 1:
-                W_current = self.__weights[f'W{i}'].copy()
+
 
             # Update weights and biases
             self.__weights[f'W{i}'] = self.__weights[f'W{i}'] - alpha * dW
