@@ -89,7 +89,7 @@ class DeepNeuralNetwork:
             W = self.__weights[f'W{i}']
             b = self.__weights[f'b{i}']
             Z = np.dot(W, A) + b
-            
+
             # Use sigmoid for hidden layers, softmax for output layer
             if i == self.__L:
                 # Softmax activation for output layer (multiclass)
@@ -98,7 +98,7 @@ class DeepNeuralNetwork:
             else:
                 # Sigmoid activation for hidden layers
                 A = 1 / (1 + np.exp(-Z))
-            
+
             self.__cache[f'A{i}'] = A
 
         return A, self.__cache
