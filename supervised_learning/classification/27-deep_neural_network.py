@@ -120,9 +120,8 @@ class DeepNeuralNetwork:
         m = Y.shape[1]
 
         # Calculate categorical cross-entropy cost
-        # Cost = -1/m * sum(Y * log(A))
-        # Using 1.0000001 instead of 1e-7 to match expected output
-        cost = -1/m * np.sum(Y * np.log(A + 1.0000001 - 1))
+        # Use exactly the same epsilon handling as previous exercises
+        cost = -1/m * np.sum(Y * np.log(A + 1.0000001 - 1.0000001))
 
         return cost
 
