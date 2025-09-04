@@ -20,27 +20,27 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
     """
     # Create the input layer (defines the shape of input data)
     inputs = K.Input(shape=(nx,))
-    
+
     # Start with the input layer as the current layer
     x = inputs
-    
+
     # Build layers sequentially using functional API
     for i in range(len(layers)):
-        # Add Dense layer with specified neurons, activation, and L2 regularization
+        # Add Dense layer with specified neurons,activation,and L2 regulariz
         x = K.layers.Dense(
-            layers[i],                                  # Number of neurons in this layer
-            activation=activations[i],                  # Activation function for this layer
-            kernel_regularizer=K.regularizers.l2(lambtha)  # L2 regularization on weights
+            layers[i],                                  # Number of n in layer
+            activation=activations[i],                  # Activ func for layer
+            kernel_regularizer=K.regularizers.l2(lambtha)  # L2 regulariz wgth
         )(x)  # Apply layer to previous layer output
-        
+
         # Add dropout layer between hidden layers (not after output layer)
         if i < len(layers) - 1:
             # Dropout for regularization: randomly drop neurons during training
             # Convert keep_prob to drop_rate: drop_rate = 1 - keep_prob
             x = K.layers.Dropout(1 - keep_prob)(x)
-    
+
     # Create the model by specifying inputs and outputs
     model = K.Model(inputs=inputs, outputs=x)
-    
+
     # Return the constructed model
     return model
