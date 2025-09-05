@@ -23,13 +23,13 @@ def train_model(network, data, labels, batch_size, epochs,
     """
     # Train the model using Keras fit method
     history = network.fit(
-        data,                   		# Input data (X_train)
-        labels,                 		# Target labels (Y_train_oh)
-        batch_size=batch_size,  		# Size of each batch for gradient descent
-        epochs=epochs,          		# Number of complete passes through the dataset
-        validation_data=validation_data, # valid data for monit
-		verbose=verbose,        		# Print train progress (True) or silent (False)
-        shuffle=shuffle         		# Shuffle data btwn epoch (Fals for reproduc)
+        data,                   		  # Input data (X_train)
+        labels,                 		  # Target labels (Y_train_oh)
+        batch_size=batch_size,  		  # Size of each batch for gradient descent
+        epochs=epochs,          		  # Number of complete pass in the dataset
+        validation_data=validation_data,  # valid data for monit
+        verbose=verbose,        		  # Print train progr (True) or silent (Fals)
+        shuffle=shuffle         		  # Shuff data btwn epoch (Fals for reproduc)
     )
 
     # Return the History object containing training metrics
