@@ -17,17 +17,17 @@ def train_model(network, data, labels, batch_size, epochs,
         batch_size: size of the batch used for mini-batch gradient descent
         epochs: number of passes through data for mini-batch gradient descent
         validation_data: data to validate the model with, if not None
-        early_stopping: boolean that indicates whether early stopping should be used
+        early_stopping: bool that indicat whether early stopping should be used
         patience: patience used for early stopping
-        verbose: boolean that determines if output should be printed during training
-        shuffle: boolean that determines whether to shuffle the batches every epoch
+        verbose: bool that determine if output should be print during training
+        shuffle: bool that determin whether to shuffle the batches every epoch
 
     Returns:
         The History object generated after training the model
     """
     # Initialize callbacks list
     callbacks = []
-    
+
     # Add early stopping if conditions are met
     if early_stopping and validation_data is not None:
         early_stop = K.callbacks.EarlyStopping(
@@ -36,18 +36,18 @@ def train_model(network, data, labels, batch_size, epochs,
             restore_best_weights=True  # Restore best weights when stopping
         )
         callbacks.append(early_stop)
-    
+
     # Train the model using Keras fit method
     history = network.fit(
         data,                           # Input data (X_train)
         labels,                         # Target labels (Y_train_oh)
-        batch_size=batch_size,          # Size of each batch for gradient descent
-        epochs=epochs,                  # Number of complete passes through dataset
-        validation_data=validation_data, # Validation data for monitoring
-        callbacks=callbacks,            # List of callbacks (including early stopping)
+        batch_size=batch_size,          # Size of batchs for gradient descent
+        epochs=epochs,                  # Number of complet pass in dataset
+        validation_data=validation_data,  # Validation data for monitoring
+        callbacks=callbacks,            # List callback (includ early stopping)
         verbose=verbose,                # Print training progress
         shuffle=shuffle                 # Shuffle data between epochs
     )
-    
+
     # Return the History object containing training metrics
     return history
