@@ -18,18 +18,14 @@ tf.random.set_seed(SEED)
 
 
 # Imports
-one_hot = __import__('3-one_hot').one_hot
-train_model = __import__('8-train').train_model
 model = __import__('9-model')
-weights = __import__('10-weights')
+config = __import__('11-config')
 
 if __name__ == '__main__':
-
-    network = model.load_model('network2.keras')
-    weights.save_weights(network, 'weights2.keras')
+    network = model.load_model('network1.keras')
+    config.save_config(network, 'config1.json')
     del network
 
-    network2 = model.load_model('network1.keras')
-    print(network2.get_weights())
-    weights.load_weights(network2, 'weights2.keras')
+    network2 = config.load_config('config1.json')
+    network2.summary()
     print(network2.get_weights())
