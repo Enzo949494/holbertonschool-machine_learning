@@ -1,3 +1,18 @@
 # Modèles de machine learning
 *.h5
 model.h5
+
+# Environnements virtuels
+venv_opti/
+venv_optimization/
+venv*/
+
+# Données
+*.npz
+MNIST.npz
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
