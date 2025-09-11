@@ -12,6 +12,6 @@ def shuffle_data(X, Y):
     """
     # Créer une liste d'indices mélangés
     permutation = np.random.permutation(X.shape[0])
-    
+
     # Réorganiser X et Y avec les mêmes indices
     return X[permutation], Y[permutation]

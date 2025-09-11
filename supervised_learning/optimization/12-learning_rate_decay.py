@@ -8,13 +8,14 @@ import tensorflow as tf
 
 def learning_rate_decay(alpha, decay_rate, decay_step):
     """
-    Creates a learning rate decay operation in tensorflow using inverse time decay
-    
+    Creates a learning rate decay operation in tfl using inverse time decay
+
     Args:
         alpha: original learning rate
         decay_rate: weight used to determine the rate at which alpha will decay
-        decay_step: number of passes of gradient descent that should occur before alpha is decayed further
-    
+        decay_step: number of passes of gradient descent that should occur
+                    before alpha is decayed further
+
     Returns:
         the learning rate decay operation
     """
