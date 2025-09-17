@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# filepath: /home/ko/holbertonschool-machine_learning/supervised_learning/regularization/2-l2_reg_cost.py
 """L2 Regularization Cost with TensorFlow"""
 
 import tensorflow as tf
@@ -17,15 +16,6 @@ def l2_reg_cost(cost, model):
         tensor containing the total cost for each layer of the network,
         accounting for L2 regularization
     """
-    # Get all regularization losses from the model
-    regularization_losses = model.losses
-    
-    # Create a list starting with the original cost
-    costs = [cost]
-    
-    # Add each regularization loss to the list
-    for reg_loss in regularization_losses:
-        costs.append(reg_loss)
-    
-    # Stack all costs into a single tensor
-    return tf.stack(costs)
+    reg_losses = [reg_loss for reg_loss in model.losses if tf.math.reduce_sum(reg_loss) != 0]
+    total_cost = cost + tf.math.add_n(reg_losses)
+    return tf.stack([total_cost] + reg_losses)
