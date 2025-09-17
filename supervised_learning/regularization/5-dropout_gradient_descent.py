@@ -24,8 +24,9 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
         if layer > 1:
             # Backpropagate through tanh and dropout
             dA_prev = np.matmul(W.T, dZ)
+            # Appliquer le masque Dropout et normaliser
             D = cache['D{}'.format(layer - 1)]
-            dA_prev *= D
-            dA_prev /= keep_prob
+            dA_prev = dA_prev * D / keep_prob
+            # Dérivée de tanh
             A_prev = cache['A{}'.format(layer - 1)]
             dZ = dA_prev * (1 - A_prev ** 2)
