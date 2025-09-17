@@ -3,6 +3,7 @@
 
 import numpy as np
 
+
 def dropout_forward_prop(X, weights, L, keep_prob):
     """
     Conducts forward propagation using Dropout
@@ -19,23 +20,23 @@ def dropout_forward_prop(X, weights, L, keep_prob):
     cache = {}
     cache['A0'] = X
 
-    for l in range(1, L + 1):
-        W = weights['W{}'.format(l)]
-        b = weights['b{}'.format(l)]
-        A_prev = cache['A{}'.format(l - 1)]
+    for layer in range(1, L + 1):
+        W = weights['W{}'.format(layer)]
+        b = weights['b{}'.format(layer)]
+        A_prev = cache['A{}'.format(layer - 1)]
         Z = np.matmul(W, A_prev) + b
 
-        if l == L:
+        if layer == L:
             # Output layer: softmax
             t = np.exp(Z - np.max(Z, axis=0, keepdims=True))
             A = t / np.sum(t, axis=0, keepdims=True)
-            cache['A{}'.format(l)] = A
+            cache['A{}'.format(layer)] = A
         else:
             # Hidden layers: tanh + dropout
             A = np.tanh(Z)
             D = np.random.binomial(1, keep_prob, size=A.shape)
             A = (A * D) / keep_prob
-            cache['A{}'.format(l)] = A
-            cache['D{}'.format(l)] = D
+            cache['A{}'.format(layer)] = A
+            cache['D{}'.format(layer)] = D
 
     return cache
