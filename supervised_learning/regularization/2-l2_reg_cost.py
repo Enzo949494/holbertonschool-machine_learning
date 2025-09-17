@@ -3,9 +3,11 @@
 
 import tensorflow as tf
 
+
 def l2_reg_cost(cost, model):
     """
-    Calculates a tensor where each element is the sum of the initial cost without regularization
+    Calculates a tensor where each element is the sum
+    of the initial cost without regularization
     and the L2 regularization penalty for a layer in the model.
 
     Args:
@@ -23,7 +25,7 @@ def l2_reg_cost(cost, model):
         if hasattr(layer, 'losses') and layer.losses:
             # Sum of L2 penalties for this layer
             layer_l2_penalty = tf.add_n(layer.losses)
-            # Add total cost for this layer (cost without regularization + L2 penalty)
+            # Add total cost for layer (cost without regularization + L2)
             costs_per_layer.append(cost + layer_l2_penalty)
 
     # Convert the list into a float32 tensor for TensorFlow compatibility
