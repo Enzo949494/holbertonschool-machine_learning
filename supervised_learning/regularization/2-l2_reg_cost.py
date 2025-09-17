@@ -3,7 +3,6 @@
 
 import tensorflow as tf
 
-
 def l2_reg_cost(cost, model):
     """
     Calculates the cost of a neural network with L2 regularization
@@ -16,6 +15,7 @@ def l2_reg_cost(cost, model):
         tensor containing the total cost for each layer of the network,
         accounting for L2 regularization
     """
-    reg_losses = [reg_loss for reg_loss in model.losses if tf.math.reduce_sum(reg_loss) != 0]
+    reg_losses = model.losses  # Un tableau de tensors, L-1 éléments si L layers (input n’a rien)
     total_cost = cost + tf.math.add_n(reg_losses)
-    return tf.stack([total_cost] + reg_losses)
+    # On retourne total et chaque perte individuelle, en gardant l’ordre
+    return tf.stack([total_cost] + list(reg_losses))
