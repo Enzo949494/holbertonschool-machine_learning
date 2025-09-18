@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+"""early stopping"""
+
+
 def early_stopping(cost, opt_cost, threshold, patience, count):
     """
     Determines if early stopping should occur.
