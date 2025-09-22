@@ -3,6 +3,7 @@
 
 import numpy as np
 
+
 def convolve_grayscale_same(images, kernel):
     """
     Performs a same convolution on grayscale images.
@@ -19,24 +20,26 @@ def convolve_grayscale_same(images, kernel):
     m, h, w = images.shape
     kh, kw = kernel.shape
 
-    # Correct padding for even and odd kernel sizes
-    pad_h = (kh - 1) // 2
-    pad_h_after = (kh - 1) - pad_h
-    pad_w = (kw - 1) // 2
-    pad_w_after = (kw - 1) - pad_w
+    # Determine padding amounts for height and width
+    pad_top = kh // 2
+    pad_bottom = kh - 1 - pad_top
+    pad_left = kw // 2
+    pad_right = kw - 1 - pad_left
 
+    # Pad images with zeros (constant mode)
     images_padded = np.pad(
         images,
-        ((0, 0), (pad_h, pad_h_after), (pad_w, pad_w_after)),
+        ((0, 0), (pad_top, pad_bottom), (pad_left, pad_right)),
         mode='constant'
     )
 
+    # Prepare output array
     output = np.zeros((m, h, w))
 
+    # Perform convolution: two for loops (vectorized over images dimension)
     for i in range(h):
         for j in range(w):
-            output[:, i, j] = np.sum(
-                images_padded[:, i:i+kh, j:j+kw] * kernel, axis=(1, 2)
-            )
+            region = images_padded[:, i:i+kh, j:j+kw]
+            output[:, i, j] = np.sum(region * kernel, axis=(1, 2))
 
     return output
