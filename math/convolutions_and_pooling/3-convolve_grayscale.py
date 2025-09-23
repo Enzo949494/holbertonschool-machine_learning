@@ -31,18 +31,20 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
         out_h = ((h + pad_h - kh) // sh) + 1
         out_w = ((w + pad_w - kw) // sw) + 1
     elif padding == 'valid':
-        pad_top = pad_bottom = pad_left = pad_right = 0
+        # Pas de padding pour 'valid'
+        images_padded = images
         out_h = ((h - kh) // sh) + 1
         out_w = ((w - kw) // sw) + 1
+        pad_top = pad_bottom = pad_left = pad_right = 0
     else:
         raise ValueError("padding must be 'same', 'valid', or a tuple of (ph, pw)")
 
-    # Pad images
-    images_padded = np.pad(
-        images,
-        ((0, 0), (pad_top, pad_bottom), (pad_left, pad_right)),
-        mode='constant'
-    )
+    if padding != 'valid':
+        images_padded = np.pad(
+            images,
+            ((0, 0), (pad_top, pad_bottom), (pad_left, pad_right)),
+            mode='constant'
+        )
 
     output = np.zeros((m, out_h, out_w))
 
