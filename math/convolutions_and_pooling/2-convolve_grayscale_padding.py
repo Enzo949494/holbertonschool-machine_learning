@@ -3,6 +3,7 @@
 
 import numpy as np
 
+
 def convolve_grayscale_padding(images, kernel, padding):
     """
     Performs a convolution on grayscale images with custom padding.
