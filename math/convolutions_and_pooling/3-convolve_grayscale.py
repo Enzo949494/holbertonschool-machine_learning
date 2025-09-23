@@ -3,6 +3,7 @@
 
 import numpy as np
 
+
 def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     """
     Performs a convolution on grayscale images with custom padding and stride.
@@ -29,7 +30,9 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     elif padding == 'valid':
         ph, pw = 0, 0
     else:
-        raise ValueError("padding must be 'same', 'valid', or a tuple of (ph, pw)")
+        raise ValueError(
+            "padding must be 'same', 'valid', or a tuple of (ph, pw)"
+        )
 
     # Pad images
     images_padded = np.pad(
