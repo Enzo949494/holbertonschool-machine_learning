@@ -3,6 +3,7 @@
 
 import numpy as np
 
+
 def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     """
     Performs a convolution on images with channels.
@@ -47,7 +48,9 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
         for j in range(out_w):
             i_start = i * sh
             j_start = j * sw
-            region = images_padded[:, i_start:i_start+kh, j_start:j_start+kw, :]
+            region = images_padded[
+                :, i_start:i_start+kh, j_start:j_start+kw, :
+            ]
             # Sum over kh, kw, c for each image
             output[:, i, j] = np.sum(region * kernel, axis=(1, 2, 3))
 
