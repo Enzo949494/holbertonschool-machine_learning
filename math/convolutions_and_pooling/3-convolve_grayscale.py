@@ -6,45 +6,41 @@ import numpy as np
 def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     """
     Performs a convolution on grayscale images with custom padding and stride.
+
+    Args:
+        images: numpy.ndarray with shape (m, h, w)
+        kernel: numpy.ndarray with shape (kh, kw)
+        padding: tuple of (ph, pw), 'same', or 'valid'
+        stride: tuple of (sh, sw)
+
+    Returns:
+        numpy.ndarray containing the convolved images
     """
     m, h, w = images.shape
     kh, kw = kernel.shape
     sh, sw = stride
 
-    # Determine padding and output size
+    # Determine padding
     if type(padding) is tuple:
         ph, pw = padding
-        pad_top = ph
-        pad_bottom = ph
-        pad_left = pw
-        pad_right = pw
-        out_h = ((h + 2 * ph - kh) // sh) + 1
-        out_w = ((w + 2 * pw - kw) // sw) + 1
-        images_padded = np.pad(
-            images,
-            ((0, 0), (pad_top, pad_bottom), (pad_left, pad_right)),
-            mode='constant'
-        )
     elif padding == 'same':
-        pad_h = ((h - 1) * sh + kh - h) // 2 + 1
-        pad_w = ((w - 1) * sw + kw - w) // 2 + 1
-        pad_top = pad_h
-        pad_bottom = pad_h
-        pad_left = pw
-        pad_right = pw
-        out_h = ((h + 2 * pad_h - kh) // sh) + 1
-        out_w = ((w + 2 * pad_w - kw) // sw) + 1
-        images_padded = np.pad(
-            images,
-            ((0, 0), (pad_top, pad_bottom), (pad_left, pad_right)),
-            mode='constant'
-        )
+        ph = ((h - 1) * sh + kh - h) // 2 + 1
+        pw = ((w - 1) * sw + kw - w) // 2 + 1
     elif padding == 'valid':
-        out_h = ((h - kh) // sh) + 1
-        out_w = ((w - kw) // sw) + 1
-        images_padded = images
+        ph, pw = 0, 0
     else:
         raise ValueError("padding must be 'same', 'valid', or a tuple of (ph, pw)")
+
+    # Pad images
+    images_padded = np.pad(
+        images,
+        ((0, 0), (ph, ph), (pw, pw)),
+        mode='constant'
+    )
+
+    # Output dimensions
+    out_h = ((h + 2 * ph - kh) // sh) + 1
+    out_w = ((w + 2 * pw - kw) // sw) + 1
 
     output = np.zeros((m, out_h, out_w))
 
