@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""cnn"""
+"""
+Module for forward propagation over a convolutional layer (CNN).
+
+Provides the conv_forward function to apply convolution, bias, and activation
+to a batch of inputs.
+"""
 
 import numpy as np
 
