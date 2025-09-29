@@ -7,9 +7,9 @@ import numpy as np
 def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     """
     Performs forward propagation over a convolutional layer.
-    
+
     Args:
-        A_prev (np.ndarray): output from previous layer (m, h_prev, w_prev, c_prev)
+        A_prev (np.ndarray): output from prev layer (m, h_prev, w_prev, c_prev)
         W (np.ndarray): kernels (filter weights) (kh, kw, c_prev, c_new)
         b (np.ndarray): biases (1, 1, 1, c_new)
         activation (function): activation function to apply
@@ -23,11 +23,11 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     m, h_prev, w_prev, c_prev = A_prev.shape
     kh, kw, c_prev_w, c_new = W.shape
     sh, sw = stride
-    
+
     # Check channel dimension match
     if c_prev != c_prev_w:
         raise ValueError("Input channels and filter channels do not match.")
-    
+
     # Compute padding width
     if padding == "same":
         ph = int(np.ceil(((h_prev - 1) * sh + kh - h_prev) / 2))
@@ -36,11 +36,11 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         ph, pw = 0, 0
     else:
         raise ValueError("padding must be 'same' or 'valid'")
-    
+
     # Compute output dimensions
     h_new = int((h_prev + 2 * ph - kh) / sh) + 1
     w_new = int((w_prev + 2 * pw - kw) / sw) + 1
-    
+
     # Pad input
     A_prev_pad = np.pad(
         A_prev,
@@ -48,10 +48,10 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         mode='constant',
         constant_values=0
     )
-    
+
     # Initialize output
     Z = np.zeros((m, h_new, w_new, c_new))
-    
+
     # Perform convolution
     for i in range(m):  # iterate over examples
         for h in range(h_new):
@@ -63,12 +63,14 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
                     horiz_end = horiz_start + kw
 
                     # Slice input
-                    a_slice = A_prev_pad[i, vert_start:vert_end, horiz_start:horiz_end, :]
-                    
+                    a_slice = A_prev_pad[
+                        i, vert_start:vert_end, horiz_start:horiz_end, :]
+
                     # Element-wise product and sum + bias
-                    Z[i, h, w, c] = np.sum(a_slice * W[:, :, :, c]) + b[:, :, :, c]
-    
+                    Z[i, h, w, c] = np.sum(
+                        a_slice * W[:, :, :, c]) + b[:, :, :, c]
+
     # Apply activation function
     A = activation(Z)
-    
+
     return A
