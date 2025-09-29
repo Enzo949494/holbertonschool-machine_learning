@@ -1,3 +1,4 @@
-*.npz
+venv_cnn/
 venv/
+*.npz
 .mypy_cache/
