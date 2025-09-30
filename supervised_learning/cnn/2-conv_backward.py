@@ -9,7 +9,8 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     Performs backpropagation over a convolutional layer.
 
     Args:
-        dZ (np.ndarray): Gradient of the cost with respect to the output of the conv layer.
+        dZ (np.ndarray): Gradient of the cost
+                         with respect to the output of the conv layer.
         A_prev (np.ndarray): Output activations of the previous layer.
         W (np.ndarray): Filters for the convolution.
         b (np.ndarray): Biases for the convolution.
