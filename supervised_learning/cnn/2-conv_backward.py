@@ -5,6 +5,22 @@ import numpy as np
 
 
 def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
+    """
+    Performs backpropagation over a convolutional layer.
+
+    Args:
+        dZ (np.ndarray): Gradient of the cost with respect to the output of the conv layer.
+        A_prev (np.ndarray): Output activations of the previous layer.
+        W (np.ndarray): Filters for the convolution.
+        b (np.ndarray): Biases for the convolution.
+        padding (str): Type of padding ("same" or "valid").
+        stride (tuple): Stride for the convolution.
+
+    Returns:
+        dA_prev (np.ndarray): Gradient with respect to the previous layer.
+        dW (np.ndarray): Gradient with respect to the filters.
+        db (np.ndarray): Gradient with respect to the biases.
+    """
     m, h_prev, w_prev, c_prev = A_prev.shape
     kh, kw, _, c_new = W.shape
     m, h_new, w_new, c_new = dZ.shape
