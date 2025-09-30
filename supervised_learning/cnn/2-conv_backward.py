@@ -9,10 +9,11 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     sh, sw = stride
 
     if padding == 'same':
-        pad_h = ((h_prev - 1) * sh + kh - h_prev) // 2
-        pad_w = ((w_prev - 1) * sw + kw - w_prev) // 2
+        pad_h = ((h_prev - 1) * sh - h_prev + kh + 1) // 2
+        pad_w = ((w_prev - 1) * sw - w_prev + kw + 1) // 2
     elif padding == 'valid':
         pad_h, pad_w = 0, 0
+
 
     dA_prev = np.zeros_like(A_prev)
     dW = np.zeros_like(W)
