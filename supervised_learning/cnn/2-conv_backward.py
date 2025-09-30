@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
+"""backpropagation cnn"""
 
 import numpy as np
+
 
 def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     m, h_prev, w_prev, c_prev = A_prev.shape
@@ -14,13 +16,20 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     elif padding == 'valid':
         pad_h, pad_w = 0, 0
 
-
     dA_prev = np.zeros_like(A_prev)
     dW = np.zeros_like(W)
     db = np.zeros_like(b)
 
-    A_prev_pad = np.pad(A_prev, ((0, 0), (pad_h, pad_h), (pad_w, pad_w), (0, 0)), mode='constant')
-    dA_prev_pad = np.pad(dA_prev, ((0, 0), (pad_h, pad_h), (pad_w, pad_w), (0, 0)), mode='constant')
+    A_prev_pad = np.pad(
+        A_prev,
+        ((0, 0), (pad_h, pad_h), (pad_w, pad_w), (0, 0)),
+        mode='constant'
+    )
+    dA_prev_pad = np.pad(
+        dA_prev,
+        ((0, 0), (pad_h, pad_h), (pad_w, pad_w), (0, 0)),
+        mode='constant'
+    )
 
     for i in range(m):
         a_prev_pad = A_prev_pad[i]
@@ -34,10 +43,17 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
                     horiz_start = w * sw
                     horiz_end = horiz_start + kw
 
-                    a_slice = a_prev_pad[vert_start:vert_end, horiz_start:horiz_end, :]
+                    a_slice = a_prev_pad[
+                        vert_start:vert_end, horiz_start:horiz_end, :]
 
-                    # Update gradients for the window and the filter's parameters
-                    da_prev_pad[vert_start:vert_end, horiz_start:horiz_end, :] += W[:, :, :, c] * dZ[i, h, w, c]
+                    # Update gradients for the window & the filter's parameters
+                    da_prev_pad[
+                        vert_start:vert_end,
+                        horiz_start:horiz_end,
+                        :
+                    ] += (
+                        W[:, :, :, c] * dZ[i, h, w, c]
+                    )
                     dW[:, :, :, c] += a_slice * dZ[i, h, w, c]
                     db[:, :, :, c] += dZ[i, h, w, c]
 
