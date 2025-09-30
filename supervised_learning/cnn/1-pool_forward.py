@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
+"""pooling propagation"""
+
 import numpy as np
+
 
 def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
     """
     Performs forward propagation over a pooling layer.
 
     Args:
-    - A_prev (np.ndarray): shape (m, h_prev, w_prev, c_prev), output of previous layer
+    - A_prev (np.ndarray): shape (m, h_prev, w_prev, c_prev),
+                           output of previous layer
     - kernel_shape (tuple): (kh, kw), size of the pooling kernel
     - stride (tuple): (sh, sw), strides for height and width
     - mode (str): 'max' or 'avg', pooling type
@@ -34,7 +38,8 @@ def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
                     horiz_start = w * sw
                     horiz_end = horiz_start + kw
 
-                    a_slice = A_prev[i, vert_start:vert_end, horiz_start:horiz_end, c]
+                    a_slice = A_prev[
+                        i, vert_start:vert_end, horiz_start:horiz_end, c]
 
                     if mode == 'max':
                         A[i, h, w, c] = np.max(a_slice)
