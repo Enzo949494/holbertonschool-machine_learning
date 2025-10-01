@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""
+Module for backpropagation over a pooling layer (max or average).
+
+Provides the pool_backward function to compute gradients for pooling layers.
+"""
 
 import numpy as np
 
