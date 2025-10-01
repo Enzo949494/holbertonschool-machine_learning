@@ -2,6 +2,7 @@
 
 import numpy as np
 
+
 def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
     """backpropagation in pooling"""
 
@@ -23,12 +24,19 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
                     horiz_end = horiz_start + kw
 
                     if mode == 'max':
-                        a_slice = A_prev[i, vert_start:vert_end, horiz_start:horiz_end, ch]
+                        a_slice = A_prev[
+                            i, vert_start:vert_end, horiz_start:horiz_end, ch]
                         mask = (a_slice == np.max(a_slice))
-                        dA_prev[i, vert_start:vert_end, horiz_start:horiz_end, ch] += dA[i, h, w, ch] * mask
+                        dA_prev[i,
+                                vert_start:vert_end,
+                                horiz_start:horiz_end,
+                                ch] += dA[i, h, w, ch] * mask
 
                     elif mode == 'avg':
                         da = dA[i, h, w, ch] / (kh * kw)
-                        dA_prev[i, vert_start:vert_end, horiz_start:horiz_end, ch] += np.ones((kh, kw)) * da
+                        dA_prev[i,
+                                vert_start:vert_end,
+                                horiz_start:horiz_end,
+                                ch] += np.ones((kh, kw)) * da
 
     return dA_prev
