@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""
+Module implementing the LeNet-5 architecture using TensorFlow/Keras.
+
+Defines the lenet5 function to build and compile a LeNet-5 model.
+"""
 
 from tensorflow import keras as K
 
