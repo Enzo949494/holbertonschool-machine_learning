@@ -9,6 +9,15 @@ from tensorflow import keras as K
 
 
 def lenet5(X):
+    """
+    Builds and compiles a LeNet-5 model using TensorFlow/Keras.
+
+    Args:
+        X (keras.Input): Input layer for the model.
+
+    Returns:
+        keras.Model: Compiled LeNet-5 model.
+    """
     he_init = K.initializers.HeNormal(seed=0)
 
     # Couche 1 : conv 6 filtres 5x5, padding same, ReLU
