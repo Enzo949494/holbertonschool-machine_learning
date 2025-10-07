@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """Identity block implementation for ResNet"""
 
-
 from tensorflow import keras as K
-
 
 
 def identity_block(A_prev, filters):
