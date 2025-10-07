@@ -38,7 +38,7 @@ def identity_block(A_prev, filters):
     bn2 = K.layers.BatchNormalization(axis=3)(conv2)
     act2 = K.layers.Activation('relu')(bn2)
 
-    # Second 1x1 convolution
+    # 2nd 1x1 convolution
     conv3 = K.layers.Conv2D(
         F12, (1, 1), padding='same',
         kernel_initializer=initializer)(act2)
