@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+"""Dense block implementation for DenseNet"""
 
 from tensorflow import keras as K
 
