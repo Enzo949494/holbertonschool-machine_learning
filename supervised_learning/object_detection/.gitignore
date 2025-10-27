@@ -1,0 +1,38 @@
+# Environnement virtuel
+venv/
+env/
+ENV/
+.venv/
+OD_venv/
+
+# Fichiers de modèles
+*.h5
+*.hdf5
+
+# Fichiers compressés
+*.zip
+*.tar.gz
+*.rar
+
+# Fichiers texte
+*.txt
+
+# Fichiers Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Dossiers et fichiers système
+.DS_Store
+.idea/
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Fichiers de données volumineux
+*.csv
+*.json
+*.pkl
+*.pickle
