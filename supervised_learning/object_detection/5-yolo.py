@@ -25,8 +25,8 @@ class Yolo:
             anchors: numpy.ndarray of shape (outputs, anchor_boxes, 2)
                      containing all of the anchor boxes
         """
-        # Load the Darknet Keras model with compile=False
-        self.model = K.models.load_model(model_path, compile=False)
+        # Load the Darknet Keras model WITHOUT compile=False
+        self.model = K.models.load_model(model_path)  # ← Enlever compile=False
 
         # Load class names from file
         with open(classes_path, 'r') as f:
@@ -48,6 +48,14 @@ class Yolo:
         box_class_probs = []
 
         image_height, image_width = image_size
+
+        # Vérifier si model.input est une liste
+        if isinstance(self.model.input, list):
+            input_width = self.model.input[0].shape[1]
+            input_height = self.model.input[0].shape[2]
+        else:
+            input_width = self.model.input.shape[1]
+            input_height = self.model.input.shape[2]
 
         for i, output in enumerate(outputs):
             grid_height, grid_width, anchor_boxes, _ = output.shape
@@ -80,9 +88,6 @@ class Yolo:
             anchor_height = self.anchors[i, :, 1]
 
             # Calculate dimensions
-            input_width = self.model.input.shape[1]
-            input_height = self.model.input.shape[2]
-
             b_w = (anchor_width * np.exp(t_w)) / input_width
             b_h = (anchor_height * np.exp(t_h)) / input_height
 
@@ -192,10 +197,8 @@ class Yolo:
         images = []
         image_paths = []
 
-        # Get all files in the folder and sort them
-        filenames = sorted(os.listdir(folder_path))
-
-        for filename in filenames:
+        # Get all files in the folder - SANS SORTED ICI
+        for filename in sorted(os.listdir(folder_path)):  # SORTED ICI
             # Construct full file path
             file_path = os.path.join(folder_path, filename)
 
