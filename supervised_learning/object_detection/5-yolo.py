@@ -217,20 +217,14 @@ class Yolo:
     def preprocess_images(self, images):
         """
         Preprocess images for the Darknet model
-
-        Args:
-            images: list of images as numpy.ndarrays
-
-        Returns:
-            tuple of (pimages, image_shapes):
-            - pimages: numpy.ndarray of shape (ni, input_h, input_w, 3)
-                      containing all preprocessed images
-            - image_shapes: numpy.ndarray of shape (ni, 2) containing
-                           original height and width of images
         """
-        # Get input dimensions from the model
-        input_h = self.model.input.shape[1]
-        input_w = self.model.input.shape[2]
+        # Get input dimensions from the model - Gestion de la liste
+        if isinstance(self.model.input, list):
+            input_h = self.model.input[0].shape[1]
+            input_w = self.model.input[0].shape[2]
+        else:
+            input_h = self.model.input.shape[1]
+            input_w = self.model.input.shape[2]
 
         pimages = []
         image_shapes = []
