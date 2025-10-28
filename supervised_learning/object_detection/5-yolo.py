@@ -192,8 +192,10 @@ class Yolo:
         images = []
         image_paths = []
 
-        # Get all files in the folder
-        for filename in os.listdir(folder_path):
+        # Get all files in the folder and sort them
+        filenames = sorted(os.listdir(folder_path))
+
+        for filename in filenames:
             # Construct full file path
             file_path = os.path.join(folder_path, filename)
 
