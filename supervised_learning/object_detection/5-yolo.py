@@ -220,11 +220,11 @@ class Yolo:
         """
         # Get input dimensions from the model - Gestion de la liste
         if isinstance(self.model.input, list):
-            input_h = self.model.input[0].shape[1]
-            input_w = self.model.input[0].shape[2]
+            input_w = self.model.input[0].shape[1]  # ← LARGEUR d'abord
+            input_h = self.model.input[0].shape[2]  # ← HAUTEUR ensuite
         else:
-            input_h = self.model.input.shape[1]
-            input_w = self.model.input.shape[2]
+            input_w = self.model.input.shape[1]
+            input_h = self.model.input.shape[2]
 
         pimages = []
         image_shapes = []
