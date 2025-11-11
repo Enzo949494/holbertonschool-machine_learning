@@ -39,21 +39,21 @@ class Poisson:
         """
         # Convert k to integer
         k = int(k)
-        
+
         # k must be non-negative for Poisson distribution
         if k < 0:
             return 0
-        
+
         # Calculate factorial of k
         factorial_k = 1
         for i in range(1, k + 1):
             factorial_k *= i
-        
+
         # Calculate e^(-lambtha)
         e = 2.7182818285
         e_power = e ** (-self.lambtha)
-        
+
         # PMF formula: (lambtha^k * e^(-lambtha)) / k!
         pmf_value = (self.lambtha ** k * e_power) / factorial_k
-        
+
         return pmf_value
