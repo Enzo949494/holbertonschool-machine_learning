@@ -41,14 +41,14 @@ class Exponential:
         # x must be non-negative for Exponential distribution
         if x < 0:
             return 0
-        
+
         # Calculate e^(-lambtha * x)
         e = 2.7182818285
         e_power = e ** (-self.lambtha * x)
-        
+
         # PDF formula: lambtha * e^(-lambtha * x)
         pdf_value = self.lambtha * e_power
-        
+
         return pdf_value
 
     def cdf(self, x):
@@ -64,10 +64,10 @@ class Exponential:
         # x must be non-negative for Exponential distribution
         if x < 0:
             return 0
-        
+
         # Calculate 1 - e^(-lambtha * x)
         e = 2.7182818285
         e_power = e ** (-self.lambtha * x)
         cdf_value = 1 - e_power
-        
+
         return cdf_value
