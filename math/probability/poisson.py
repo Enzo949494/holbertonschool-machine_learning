@@ -57,3 +57,37 @@ class Poisson:
         pmf_value = (self.lambtha ** k * e_power) / factorial_k
 
         return pmf_value
+
+    def cdf(self, k):
+        """
+        Calculates the value of the CDF for a given number of "successes"
+
+        Args:
+            k: number of "successes"
+
+        Returns:
+            CDF value for k, or 0 if k is out of range
+        """
+        # Convert k to integer
+        k = int(k)
+
+        # k must be non-negative for Poisson distribution
+        if k < 0:
+            return 0
+
+        # CDF is the sum of PMF from 0 to k
+        cdf_value = 0
+        for i in range(k + 1):
+            # Calculate factorial of i
+            factorial_i = 1
+            for j in range(1, i + 1):
+                factorial_i *= j
+
+            # Calculate e^(-lambtha)
+            e = 2.7182818285
+            e_power = e ** (-self.lambtha)
+
+            # Add PMF for i to CDF
+            cdf_value += (self.lambtha ** i * e_power) / factorial_i
+
+        return cdf_value
