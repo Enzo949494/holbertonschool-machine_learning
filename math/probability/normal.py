@@ -63,3 +63,50 @@ class Normal:
         # x = mean + z * stddev
         x = self.mean + z * self.stddev
         return x
+
+    def pdf(self, x):
+        """
+        Calculates the value of the PDF for a given x-value
+
+        Args:
+            x: x-value
+
+        Returns:
+            PDF value for x
+        """
+        # Constants
+        pi = 3.1415926536
+        e = 2.7182818285
+
+        # PDF formula: (1 / (stddev * sqrt(2 * pi))) * e^(-0.5 * ((x - mean) / stddev)^2)
+        coefficient = 1 / (self.stddev * (2 * pi) ** 0.5)
+        exponent = -0.5 * ((x - self.mean) / self.stddev) ** 2
+        pdf_value = coefficient * (e ** exponent)
+
+        return pdf_value
+
+    def cdf(self, x):
+        """
+        Calculates the value of the CDF for a given x-value
+
+        Args:
+            x: x-value
+
+        Returns:
+            CDF value for x
+        """
+        # Constants
+        pi = 3.1415926536
+
+        # Calculate z-score
+        z = (x - self.mean) / (self.stddev * (2 ** 0.5))
+
+        # Error function approximation using Taylor series
+        # erf(z) ≈ (2/sqrt(pi)) * (z - z^3/3 + z^5/10 - z^7/42 + z^9/216)
+        erf = (2 / (pi ** 0.5)) * (z - (z ** 3) / 3 + (z ** 5) / 10 -
+                                     (z ** 7) / 42 + (z ** 9) / 216)
+
+        # CDF formula: 0.5 * (1 + erf((x - mean) / (stddev * sqrt(2))))
+        cdf_value = 0.5 * (1 + erf)
+
+        return cdf_value
