@@ -26,11 +26,11 @@ class Normal:
                 raise TypeError("data must be a list")
             if len(data) < 2:
                 raise ValueError("data must contain multiple values")
-            
+
             # Calculate mean
             n = len(data)
             self.mean = sum(data) / n
-            
+
             # Calculate standard deviation
             # stddev = sqrt(sum((x - mean)^2) / n)
             variance = sum((x - self.mean) ** 2 for x in data) / n
