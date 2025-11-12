@@ -78,7 +78,8 @@ class Normal:
         pi = 3.1415926536
         e = 2.7182818285
 
-        # PDF formula: (1 / (stddev * sqrt(2 * pi))) * e^(-0.5 * ((x - mean) / stddev)^2)
+        # PDF formula: (1 / (stddev * sqrt(2 * pi)))
+        # * e^(-0.5 * ((x - mean) / stddev)^2)
         coefficient = 1 / (self.stddev * (2 * pi) ** 0.5)
         exponent = -0.5 * ((x - self.mean) / self.stddev) ** 2
         pdf_value = coefficient * (e ** exponent)
@@ -104,7 +105,7 @@ class Normal:
         # Error function approximation using Taylor series
         # erf(z) ≈ (2/sqrt(pi)) * (z - z^3/3 + z^5/10 - z^7/42 + z^9/216)
         erf = (2 / (pi ** 0.5)) * (z - (z ** 3) / 3 + (z ** 5) / 10 -
-                                     (z ** 7) / 42 + (z ** 9) / 216)
+                                   (z ** 7) / 42 + (z ** 9) / 216)
 
         # CDF formula: 0.5 * (1 + erf((x - mean) / (stddev * sqrt(2))))
         cdf_value = 0.5 * (1 + erf)
