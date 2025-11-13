@@ -50,3 +50,32 @@ class Binomial:
 
             # Recalculate p with the rounded n
             self.p = mean / self.n
+
+    def pmf(self, k):
+        """
+        Calculates the value of the PMF for a given number of "successes"
+
+        Args:
+            k: number of "successes"
+
+        Returns:
+            PMF value for k, or 0 if k is out of range
+        """
+        # Convert k to integer
+        k = int(k)
+
+        # k must be between 0 and n for Binomial distribution
+        if k < 0 or k > self.n:
+            return 0
+
+        # Calculate binomial coefficient C(n, k) = n! / (k! * (n-k)!)
+        # Using the formula: C(n, k) = n * (n-1) * ... * (n-k+1) / k!
+        binomial_coef = 1
+        for i in range(k):
+            binomial_coef = binomial_coef * (self.n - i) / (i + 1)
+
+        # PMF formula: C(n, k) * p^k * (1-p)^(n-k)
+        pmf_value = binomial_coef * (self.p ** k) * ((1 - self.p) **
+                                                     (self.n - k))
+
+        return pmf_value
