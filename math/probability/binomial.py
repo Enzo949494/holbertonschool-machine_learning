@@ -79,3 +79,27 @@ class Binomial:
                                                      (self.n - k))
 
         return pmf_value
+
+    def cdf(self, k):
+        """
+        Calculates the value of the CDF for a given number of "successes"
+
+        Args:
+            k: number of "successes"
+
+        Returns:
+            CDF value for k, or 0 if k is out of range
+        """
+        # Convert k to integer
+        k = int(k)
+
+        # k must be non-negative for Binomial distribution
+        if k < 0:
+            return 0
+
+        # CDF is the sum of PMF from 0 to k
+        cdf_value = 0
+        for i in range(k + 1):
+            cdf_value += self.pmf(i)
+
+        return cdf_value
