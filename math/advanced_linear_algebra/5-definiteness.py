@@ -11,10 +11,12 @@ def definiteness(matrix):
     Calculates the definiteness of a matrix.
 
     Args:
-        matrix: A numpy.ndarray of shape (n, n) whose definiteness should be calculated
+        matrix: A numpy.ndarray of shape (n, n)
+                whose definiteness should be calculated
 
     Returns:
-        The string describing the definiteness of the matrix, or None if invalid
+        The string describing the definiteness of the matrix,
+        or None if invalid
 
     Raises:
         TypeError: If matrix is not a numpy.ndarray
