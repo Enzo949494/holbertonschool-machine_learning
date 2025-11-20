@@ -89,4 +89,4 @@ class MultiNormal:
         # Calculate and return the PDF
         pdf_value = (numerator / denominator) * np.exp(exponent)
 
-        return float(pdf_value)
+        return pdf_value[0][0]
