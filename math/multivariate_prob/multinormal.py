@@ -80,7 +80,7 @@ class MultiNormal:
         diff = x - self.mean
 
         # Calculate the exponent: -0.5 * (x-μ)^T * Σ^(-1) * (x-μ)
-        exponent = -0.5 * np.dot(diff.T, np.dot(inv_cov, diff))
+        exponent = -0.5 * np.dot(diff.T, np.dot(inv_cov, diff))[0, 0]
 
         # Calculate the normalization constant: 1 / ((2π)^(d/2) * |Σ|^(1/2))
         numerator = 1
@@ -89,4 +89,4 @@ class MultiNormal:
         # Calculate and return the PDF
         pdf_value = (numerator / denominator) * np.exp(exponent)
 
-        return pdf_value[0][0]
+        return float(pdf_value)
