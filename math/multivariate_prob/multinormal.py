@@ -45,3 +45,48 @@ class MultiNormal:
         # Cov = (1/(n-1)) * (X - mean) * (X - mean)^T
         data_centered = data - self.mean
         self.cov = np.dot(data_centered, data_centered.T) / (n - 1)
+
+    def pdf(self, x):
+        """
+        Calculate the PDF at a data point.
+
+        Args:
+            x: numpy.ndarray of shape (d, 1) containing the data point
+               whose PDF should be calculated
+
+        Returns:
+            float: the value of the PDF at point x
+
+        Raises:
+            TypeError: if x is not a numpy.ndarray
+            ValueError: if x is not of shape (d, 1)
+        """
+        if not isinstance(x, np.ndarray):
+            raise TypeError("x must be a numpy.ndarray")
+
+        d = self.mean.shape[0]
+        if x.shape != (d, 1):
+            raise ValueError(f"x must have the shape ({d}, 1)")
+
+        # PDF formula for multivariate normal:
+        # P(x) = (1 / ((2π)^(d/2) * |Σ|^(1/2))) *
+        # exp(-0.5 * (x-μ)^T * Σ^(-1) * (x-μ))
+
+        # Calculate determinant and inverse of covariance matrix
+        det_cov = np.linalg.det(self.cov)
+        inv_cov = np.linalg.inv(self.cov)
+
+        # Calculate the difference: (x - mean)
+        diff = x - self.mean
+
+        # Calculate the exponent: -0.5 * (x-μ)^T * Σ^(-1) * (x-μ)
+        exponent = -0.5 * np.dot(diff.T, np.dot(inv_cov, diff))
+
+        # Calculate the normalization constant: 1 / ((2π)^(d/2) * |Σ|^(1/2))
+        numerator = 1
+        denominator = np.sqrt((2 * np.pi) ** d * det_cov)
+
+        # Calculate and return the PDF
+        pdf_value = (numerator / denominator) * np.exp(exponent)
+
+        return float(pdf_value)
