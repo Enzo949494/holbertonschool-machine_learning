@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import numpy as np
-from math import comb
 
 
 def likelihood(x, n, P):
@@ -37,8 +36,8 @@ def likelihood(x, n, P):
     if np.any((P < 0) | (P > 1)):
         raise ValueError("All values in P must be in the range [0, 1]")
     
-    # Calculate binomial coefficient C(n, x)
-    binomial_coef = comb(n, x)
+    # Calculate binomial coefficient C(n, x) using factorial
+    binomial_coef = np.math.factorial(n) / (np.math.factorial(x) * np.math.factorial(n - x))
     
     # Calculate likelihood for each probability: C(n,x) * p^x * (1-p)^(n-x)
     likelihoods = binomial_coef * (P ** x) * ((1 - P) ** (n - x))
