@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+Module for calculating binomial likelihood.
+"""
 
 import numpy as np
 
