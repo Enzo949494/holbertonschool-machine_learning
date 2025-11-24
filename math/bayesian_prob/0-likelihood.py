@@ -23,7 +23,7 @@ def likelihood(x, n, P):
 
     # Validate x
     if not isinstance(x, (int, np.integer)) or x < 0:
-        raise ValueError("x must be an integer that is greater than or"
+        raise ValueError("x must be an integer that is greater than or "
                          "equal to 0")
 
     # Validate x <= n
