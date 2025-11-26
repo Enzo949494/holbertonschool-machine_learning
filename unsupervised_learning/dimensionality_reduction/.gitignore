@@ -1,0 +1,6 @@
+# Data files
+mnist2500_*.txt
+
+# Python
+__pycache__/
+*.pyc
