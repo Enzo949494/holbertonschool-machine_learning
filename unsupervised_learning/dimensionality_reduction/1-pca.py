@@ -22,26 +22,26 @@ def pca(X, ndim):
             the data projected onto the first ndim principal components.
     
     Notes:
-        - The input data X should be centered (mean = 0) before calling 
-          this function for best results
+        - Automatically centers the data (subtracts the mean)
         - Uses Singular Value Decomposition (SVD) for computation
-        - The transformation matrix is derived from the right singular vectors
     
     Example:
         >>> X = np.random.randn(100, 50)  # 100 samples, 50 features
-        >>> X_centered = X - np.mean(X, axis=0)
-        >>> T = pca(X_centered, 10)  # Project to 10 dimensions
+        >>> T = pca(X, 10)  # Project to 10 dimensions
         >>> print(T.shape)  # (100, 10)
     """
+    # Center the data by subtracting the mean
+    X_centered = X - np.mean(X, axis=0)
+    
     # Perform Singular Value Decomposition
-    U, S, Vt = np.linalg.svd(X, full_matrices=False)
+    U, S, Vt = np.linalg.svd(X_centered, full_matrices=False)
     
     # Vt contains the principal components as rows
     # Take the first ndim rows and transpose to get (d, ndim) matrix
     W = Vt[:ndim].T
     
-    # Project X onto the first ndim principal components
-    # T = X @ W gives shape (n, ndim)
-    T = np.matmul(X, W)
+    # Project centered X onto the first ndim principal components
+    # T = X_centered @ W gives shape (n, ndim)
+    T = np.matmul(X_centered, W)
     
     return T
