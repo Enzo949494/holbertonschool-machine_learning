@@ -1,0 +1,14 @@
+# Environnement virtuel
+venv_clustering/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+
+# IDE
+.vscode/
+
+# Données
+*.csv
+*.pkl
