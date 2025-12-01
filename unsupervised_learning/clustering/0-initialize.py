@@ -24,7 +24,7 @@ def initialize(X, k):
     if k > n:
         return None
     
-    # Get min and max values for each dimension
+    # Get min and max values each dimension
     min_vals = np.min(X, axis=0)
     max_vals = np.max(X, axis=0)
     
