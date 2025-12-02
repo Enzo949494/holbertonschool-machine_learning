@@ -19,7 +19,7 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
         X: numpy.ndarray of shape (n, d) - the dataset
         kmin: positive integer - minimum number of clusters (default 1)
         kmax: positive integer - maximum number of clusters
-        iterations: positive integer - max iterations for K-means (default 1000)
+        iterations: positive integer - max iterations K-means (default 1000)
 
     Returns:
         results: list of K-means outputs each cluster size
