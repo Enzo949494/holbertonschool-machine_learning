@@ -57,19 +57,17 @@ def kmeans(X, k, iterations=1000):
         for i in range(k):
             cluster_points = X[clss == i]
             if cluster_points.shape[0] == 0:
-                # Mark for reinitialization
-                C[i] = None
+                # Reinitialize centroid if cluster is empty
+                C[i] = np.random.uniform(min_vals, max_vals, size=d)
             else:
                 C[i] = cluster_points.mean(axis=0)
-
-        # Reinitialize empty centroids in one call
-        empty_mask = np.array([C[i] is None for i in range(k)])
-        if np.any(empty_mask):
-            C[empty_mask] = np.random.uniform(min_vals, max_vals, 
-                                               size=(np.sum(empty_mask), d))
 
         # Check convergence
         if np.allclose(C, C_prev):
             break
+
+    # Final assignment step before returning
+    distances = np.linalg.norm(X[:, np.newaxis] - C, axis=2)
+    clss = np.argmin(distances, axis=1)
 
     return C, clss
