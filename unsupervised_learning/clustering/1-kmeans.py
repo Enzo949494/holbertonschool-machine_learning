@@ -16,7 +16,8 @@ def kmeans(X, k, iterations=1000):
     Args:
         X: numpy.ndarray of shape (n, d) - the dataset
         k: positive integer - number of clusters
-        iterations: positive integer - maximum number of iterations (default 1000)
+        iterations: positive integer - maximum number
+                    of iterations (default 1000)
 
     Returns:
         C: numpy.ndarray of shape (k, d) - centroid means each cluster
