@@ -54,7 +54,6 @@ def kmeans(X, k, iterations=1000):
         clss = np.argmin(distances, axis=1)
 
         # Update step: recalculate centroids
-        C = np.zeros((k, d))
         for i in range(k):
             cluster_points = X[clss == i]
             if cluster_points.shape[0] == 0:
