@@ -37,7 +37,7 @@ def kmeans(X, k, iterations=1000):
     if k > n:
         return None, None
 
-    # Get min and max values for initialization
+    # Get min and max values initialization
     min_vals = np.min(X, axis=0)
     max_vals = np.max(X, axis=0)
 
