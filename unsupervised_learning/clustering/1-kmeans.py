@@ -7,7 +7,6 @@ a dataset into k clusters based on feature similarity.
 """
 
 import numpy as np
-initialize = __import__('0-initialize').initialize
 
 
 def kmeans(X, k, iterations=1000):
@@ -38,10 +37,12 @@ def kmeans(X, k, iterations=1000):
     if k > n:
         return None, None
 
-    # Initialize centroids
-    C = initialize(X, k)
-    if C is None:
-        return None, None
+    # Get min and max values for initialization
+    min_vals = np.min(X, axis=0)
+    max_vals = np.max(X, axis=0)
+
+    # Initialize centroids with multivariate uniform distribution
+    C = np.random.uniform(min_vals, max_vals, size=(k, d))
 
     # K-means iterations
     for _ in range(iterations):
@@ -58,9 +59,7 @@ def kmeans(X, k, iterations=1000):
             cluster_points = X[clss == i]
             if cluster_points.shape[0] == 0:
                 # Reinitialize centroid if cluster is empty
-                C[i] = np.random.uniform(np.min(X, axis=0), 
-                                        np.max(X, axis=0), 
-                                        size=d)
+                C[i] = np.random.uniform(min_vals, max_vals, size=d)
             else:
                 C[i] = cluster_points.mean(axis=0)
 
