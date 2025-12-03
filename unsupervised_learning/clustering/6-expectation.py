@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Module for calculating the expectation step in EM algorithm for GMM.
+Module calculating the expectation step in EM algorithm for GMM.
 
 This module provides functionality to calculate posterior probabilities
 and log likelihood in the expectation step of the EM algorithm.
@@ -12,12 +12,12 @@ pdf = __import__('5-pdf').pdf
 
 def expectation(X, pi, m, S):
     """
-    Calculates the expectation step of the EM algorithm for a GMM.
+    Calculates the expectation step of the EM algorithm a GMM.
 
     Args:
         X: numpy.ndarray of shape (n, d) - the dataset
-        pi: numpy.ndarray of shape (k,) - priors for each cluster
-        m: numpy.ndarray of shape (k, d) - centroid means for each cluster
+        pi: numpy.ndarray of shape (k,) - priors each cluster
+        m: numpy.ndarray of shape (k, d) - centroid means each cluster
         S: numpy.ndarray of shape (k, d, d) - covariance matrices
 
     Returns:
@@ -49,7 +49,7 @@ def expectation(X, pi, m, S):
     # Initialize g matrix (k, n)
     g = np.zeros((k, n))
 
-    # Calculate PDF for each cluster
+    # Calculate PDF each cluster
     for i in range(k):
         P = pdf(X, m[i], S[i])
         if P is None:
