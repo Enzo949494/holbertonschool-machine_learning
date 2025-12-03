@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Module calculating the maximization step in EM algorithm for GMM.
+Module calculating the maximization step in EM algorithm GMM.
 
 This module provides functionality to update GMM parameters
 in the maximization step of the EM algorithm.
@@ -40,6 +40,10 @@ def maximization(X, g):
 
     # Avoid division by zero
     if np.any(N_k == 0):
+        return None, None, None
+
+    # Validate g: values should be between 0 and 1
+    if np.any(g < 0) or np.any(g > 1):
         return None, None, None
 
     # Update priors
