@@ -79,6 +79,10 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
                 i + 1, round(l_new, 5)))
 
         if abs(l_new - l) <= tol:
+            # Affiche l'itération suivante avant de break
+            if verbose and (i + 1) % 10 == 0:
+                print("Log Likelihood after {} iterations: {}".format(
+                    i + 1, round(l_new, 5)))
             l = l_new
             break
 
