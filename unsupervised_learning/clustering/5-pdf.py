@@ -42,13 +42,13 @@ def pdf(X, m, S):
     # Calculate the numerator: (X - m) @ S^-1 @ (X - m)^T
     X_minus_m = X - m
     S_inv = np.linalg.inv(S)
-    
+
     # Calculate Mahalanobis distance squared all points
     numerator = np.sum(X_minus_m @ S_inv * X_minus_m, axis=1)
 
     # Calculate determinant and normalization factor
     det_S = np.linalg.det(S)
-    
+
     if det_S <= 0:
         return None
 
