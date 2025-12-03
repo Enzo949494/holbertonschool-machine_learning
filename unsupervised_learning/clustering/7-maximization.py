@@ -35,7 +35,12 @@ def maximization(X, g):
     n, d = X.shape
     k = g.shape[0]
 
-    # Calculate N_k: sum of posterior probabilities each cluster
+    # Validate that g sums to 1 across clusters each data point
+    g_sums = np.sum(g, axis=0)
+    if not np.allclose(g_sums, 1):
+        return None, None, None
+
+    # Calculate N_k: sum of posterior probabilities  each cluster
     N_k = np.sum(g, axis=1)
 
     # Avoid division by zero
