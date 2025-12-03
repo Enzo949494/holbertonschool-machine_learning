@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Module for calculating Gaussian probability density function.
+Module calculating Gaussian probability density function.
 
 This module provides functionality to calculate the PDF of a
-multivariate Gaussian distribution for given data points.
+multivariate Gaussian distribution given data points.
 """
 
 import numpy as np
@@ -19,7 +19,7 @@ def pdf(X, m, S):
         S: numpy.ndarray of shape (d, d) - covariance matrix
 
     Returns:
-        P: numpy.ndarray of shape (n,) - PDF values for each data point
+        P: numpy.ndarray of shape (n,) - PDF values each data point
            or None on failure
     """
     if not isinstance(X, np.ndarray) or X.ndim != 2:
@@ -43,7 +43,7 @@ def pdf(X, m, S):
     X_minus_m = X - m
     S_inv = np.linalg.inv(S)
     
-    # Calculate Mahalanobis distance squared for all points
+    # Calculate Mahalanobis distance squared all points
     numerator = np.sum(X_minus_m @ S_inv * X_minus_m, axis=1)
 
     # Calculate determinant and normalization factor
