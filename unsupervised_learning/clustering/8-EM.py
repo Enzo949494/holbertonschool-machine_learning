@@ -58,8 +58,8 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
         if g is None or l is None:
             return None, None, None, None, None
 
-        # Print log likelihood if verbose
-        if verbose and (i % 10 == 0 or i == iterations - 1):
+        # Print log likelihood if verbose (tous les 10 iterations)
+        if verbose and (i % 10 == 0):
             print("Log Likelihood after {} iterations: {}".format(
                 i, round(l, 5)))
 
@@ -73,12 +73,11 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
         if g is None or l_new is None:
             return None, None, None, None, None
 
-        # Print after convergence if verbose
-        if verbose and abs(l_new - l) <= tol:
-            print("Log Likelihood after {} iterations: {}".format(
-                i + 1, round(l_new, 5)))
-
+        # Check if converged
         if abs(l_new - l) <= tol:
+            if verbose and (i + 1) % 10 == 0:
+                print("Log Likelihood after {} iterations: {}".format(
+                    i + 1, round(l_new, 5)))
             l = l_new
             break
 
