@@ -42,10 +42,6 @@ def maximization(X, g):
     if np.any(N_k == 0):
         return None, None, None
 
-    # Validate g: values should be between 0 and 1
-    if np.any(g < 0) or np.any(g > 1):
-        return None, None, None
-
     # Update priors
     pi = N_k / n
 
