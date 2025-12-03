@@ -58,12 +58,12 @@ def expectation(X, pi, m, S):
 
     # Normalize to get posterior probabilities
     g_sum = np.sum(g, axis=0)
-    
+
     # Avoid division by zero
     g_sum = np.maximum(g_sum, 1e-300)
     g = g / g_sum
 
     # Calculate total log likelihood
-    l = np.sum(np.log(g_sum))
+    l = np.sum(np.log(g_sum))  # noqa: E741
 
     return g, l
