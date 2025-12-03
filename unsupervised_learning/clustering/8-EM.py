@@ -74,11 +74,11 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
             return None, None, None, None, None
 
         # Print after convergence if verbose
-        # Check convergence with relative tolerance
-        if abs(l_new - l) / (abs(l) + 1e-10) <= tol:
-            if verbose:
-                print("Log Likelihood after {} iterations: {}".format(
-                    i + 1, round(l_new, 5)))
+        if verbose and abs(l_new - l) <= tol:
+            print("Log Likelihood after {} iterations: {}".format(
+                i + 1, round(l_new, 5)))
+
+        if abs(l_new - l) <= tol:
             l = l_new
             break
 
