@@ -3,7 +3,7 @@
 Module for K-means clustering using scikit-learn.
 """
 
-from sklearn.cluster import KMeans
+import sklearn.cluster
 
 
 def kmeans(X, k):
@@ -28,7 +28,7 @@ def kmeans(X, k):
         return None, None
 
     # Create and fit KMeans model
-    km = KMeans(n_clusters=k, random_state=None)
+    km = sklearn.cluster.KMeans(n_clusters=k, random_state=None)
     clss = km.fit_predict(X)
     C = km.cluster_centers_
 
