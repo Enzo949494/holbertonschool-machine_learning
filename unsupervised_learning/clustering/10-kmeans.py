@@ -9,11 +9,11 @@ import sklearn.cluster
 def kmeans(X, k):
     """
     Performs K-means clustering on a dataset.
-    
+
     Args:
         X: numpy.ndarray of shape (n, d) - dataset
         k: number of clusters
-    
+
     Returns:
         C: numpy.ndarray of shape (k, d) - centroid means
         clss: numpy.ndarray of shape (n,) - cluster index for each point
