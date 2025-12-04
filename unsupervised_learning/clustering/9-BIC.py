@@ -23,8 +23,6 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     if not isinstance(verbose, bool):
         return None, None, None, None
     
-    if kmax is None:
-        return None, None, None, None
 
     n, d = X.shape
 
