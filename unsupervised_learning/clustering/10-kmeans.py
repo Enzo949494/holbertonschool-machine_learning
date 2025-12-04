@@ -3,7 +3,6 @@
 Module for K-means clustering using scikit-learn.
 """
 
-import numpy as np
 from sklearn.cluster import KMeans
 
 
@@ -19,7 +18,7 @@ def kmeans(X, k):
         C: numpy.ndarray of shape (k, d) - centroid means
         clss: numpy.ndarray of shape (n,) - cluster index for each point
     """
-    if not isinstance(X, np.ndarray) or X.ndim != 2:
+    if not isinstance(X, type(X)) or X.ndim != 2:
         return None, None
 
     if not isinstance(k, int) or k <= 0:
