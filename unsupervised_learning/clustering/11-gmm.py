@@ -9,11 +9,11 @@ import sklearn.mixture
 def gmm(X, k):
     """
     Calculates a GMM from a dataset.
-    
+
     Args:
         X: numpy.ndarray of shape (n, d) - dataset
         k: number of clusters
-    
+
     Returns:
         pi: numpy.ndarray of shape (k,) - cluster priors
         m: numpy.ndarray of shape (k, d) - centroid means
@@ -33,7 +33,7 @@ def gmm(X, k):
     # Create and fit GMM model
     gm = sklearn.mixture.GaussianMixture(n_components=k)
     gm.fit(X)
-    
+
     pi = gm.weights_
     m = gm.means_
     S = gm.covariances_
