@@ -15,21 +15,6 @@ maximization = __import__('7-maximization').maximization
 def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     """
     Performs expectation maximization a Gaussian Mixture Model.
-
-    Args:
-        X: numpy.ndarray of shape (n, d) - the dataset
-        k: positive integer - number of clusters
-        iterations: positive integer - max iterations (default 1000)
-        tol: non-negative float - tolerance early stopping (default 1e-5)
-        verbose: boolean - print log likelihood info (default False)
-
-    Returns:
-        pi: numpy.ndarray of shape (k,) - priors each cluster
-        m: numpy.ndarray of shape (k, d) - centroid means each cluster
-        S: numpy.ndarray of shape (k, d, d) - covariance matrices
-        g: numpy.ndarray of shape (k, n) - posterior probabilities
-        l: total log likelihood
-        or None, None, None, None, None on failure
     """
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None, None, None, None
@@ -51,40 +36,37 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
     if pi is None or m is None or S is None:
         return None, None, None, None, None
 
+    l_prev = 0
+    g = None
+    l = None
+
     # EM iterations
-    for i in range(iterations):
-        # Expectation step
+    for i in range(iterations + 1):
+        # E-step: compute g and current log-likelihood
         g, l = expectation(X, pi, m, S)
         if g is None or l is None:
             return None, None, None, None, None
 
-        # Print log likelihood if verbose
-        if verbose and (i % 10 == 0 or i == iterations - 1):
+        # Print log likelihood every 10 iterations (including 0)
+        if verbose and (i % 10 == 0):
             print("Log Likelihood after {} iterations: {}".format(
                 i, round(l, 5)))
 
-        # Maximization step
+        # Check convergence (after computing l)
+        if i > 0 and abs(l - l_prev) <= tol:
+            break
+
+        # M-step: update parameters
         pi, m, S = maximization(X, g)
         if pi is None or m is None or S is None:
             return None, None, None, None, None
 
-        # Check convergence after maximization
-        g, l_new = expectation(X, pi, m, S)
-        if g is None or l_new is None:
-            return None, None, None, None, None
+        l_prev = l
 
-        # Print after convergence if verbose
-        if verbose and abs(l_new - l) <= tol:
-            print("Log Likelihood after {} iterations: {}".format(
-                i + 1, round(l_new, 5)))
+    # After loop, if last iteration is not multiple of 10, print once more
+    if verbose and (i % 10 != 0):
+        print("Log Likelihood after {} iterations: {}".format(
+            i, round(l, 5)))
 
-        if abs(l_new - l) <= tol:
-            l = l_new
-            break
-
-        l = l_new
-
-    # Final expectation step to get final g and l
-    g, l = expectation(X, pi, m, S)
-
+    # g et l correspondent déjà à la dernière E-step effectuée
     return pi, m, S, g, l
