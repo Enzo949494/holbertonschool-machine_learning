@@ -68,5 +68,9 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
         print("Log Likelihood after {} iterations: {}".format(
             i, round(l, 5)))
 
+    g, l = expectation(X, pi, m, S)
+    if g is None or l is None:
+        return None, None, None, None, None
+    
     # g et l correspondent déjà à la dernière E-step effectuée
     return pi, m, S, g, l
