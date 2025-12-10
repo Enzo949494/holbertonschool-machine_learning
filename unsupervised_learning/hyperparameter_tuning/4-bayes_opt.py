@@ -50,20 +50,16 @@ class BayesianOptimization:
             Y_best = np.max(self.gp.Y)
         
         # Calculate improvement
-        # For minimization: improvement = Y_best - mu
-        # For maximization: improvement = mu - Y_best
         if self.minimize:
             improvement = Y_best - mu
         else:
             improvement = mu - Y_best
         
-        # Avoid division by zero
-        with np.errstate(divide='warn'):
-            # Z = (improvement - xsi) / sigma
+        # Calculate Expected Improvement
+        # Avoid division by zero with a small epsilon
+        with np.errstate(divide='ignore', invalid='ignore'):
             Z = (improvement - self.xsi) / sigma
-            # Expected Improvement = improvement * norm.cdf(Z) + sigma * norm.pdf(Z)
             EI = improvement * norm.cdf(Z) + sigma * norm.pdf(Z)
-            # Set EI to 0 where sigma is 0 (no uncertainty)
             EI[sigma == 0.0] = 0.0
         
         # Find the point with maximum EI
