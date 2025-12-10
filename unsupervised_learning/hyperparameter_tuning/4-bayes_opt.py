@@ -42,30 +42,32 @@ class BayesianOptimization:
             EI: numpy.ndarray of shape (ac_samples,) - expected improvement
                 of each potential sample in self.X_s
         """
-        # Predictions of GP on the acquisition grid
-        mu, sigma = self.gp.predict(self.X_s)      # sigma is variance
-        sigma = np.sqrt(sigma)                     # convert variance -> std dev
+        # Prédictions du GP sur la grille X_s
+        mu, sigma = self.gp.predict(self.X_s)      # sigma = variance
+        sigma = np.sqrt(sigma)                     # on passe à l'écart-type
 
-        # Best observed value so far
         Y = self.gp.Y
+
+        # Best value observée selon minimise / maximise
         if self.minimize:
             Y_best = np.min(Y)
-            improvement = Y_best - mu - self.xsi
+            # amélioration ajustée par xsi
+            imp = Y_best - mu - self.xsi
         else:
             Y_best = np.max(Y)
-            improvement = mu - Y_best - self.xsi
+            imp = mu - Y_best - self.xsi
 
-        # Avoid division by zero
-        with np.errstate(divide='warn', invalid='warn'):
-            Z = np.zeros_like(mu)
-            nonzero = sigma > 0
-            Z[nonzero] = improvement[nonzero] / sigma[nonzero]
+        # Calcul de Z seulement là où sigma > 0
+        Z = np.zeros_like(mu)
+        nonzero = sigma > 0
+        Z[nonzero] = imp[nonzero] / sigma[nonzero]
 
-            EI = np.zeros_like(mu)
-            EI[nonzero] = (improvement[nonzero] * norm.cdf(Z[nonzero]) +
-                           sigma[nonzero] * norm.pdf(Z[nonzero]))
+        # Expected Improvement
+        EI = np.zeros_like(mu)
+        EI[nonzero] = (imp[nonzero] * norm.cdf(Z[nonzero]) +
+                       sigma[nonzero] * norm.pdf(Z[nonzero]))
 
-        # Next point is where EI is maximal
+        # Prochain point = argmax EI
         X_next = self.X_s[np.argmax(EI)]
 
         return X_next, EI
