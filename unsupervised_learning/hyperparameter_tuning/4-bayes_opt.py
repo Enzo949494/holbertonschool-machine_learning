@@ -8,12 +8,11 @@ GP = __import__('2-gp').GaussianProcess
 
 class BayesianOptimization:
     """Performs Bayesian optimization on a noiseless 1D Gaussian process"""
-
-    def __init__(self, f, X_init, Y_init, bounds,
-                 ac_samples, l=1, sigma_f=1, xsi=0.01, minimize=True):
+    
+    def __init__(self, f, X_init, Y_init, bounds, ac_samples, l=1, sigma_f=1, xsi=0.01, minimize=True):
         """
         Initialize the Bayesian Optimization
-
+        
         Args:
             f: the black-box function to be optimized
             X_init: numpy.ndarray of shape (t, 1) - inputs already sampled
@@ -29,45 +28,45 @@ class BayesianOptimization:
         self.gp = GP(X_init, Y_init, l=l, sigma_f=sigma_f)
         self.xsi = xsi
         self.minimize = minimize
-
-        # Acquisition sample points, evenly spaced between bounds
+        
+        # Create evenly spaced acquisition sample points
         self.X_s = np.linspace(bounds[0], bounds[1], ac_samples).reshape(-1, 1)
-
+    
     def acquisition(self):
         """
-        Calculate the next best sample location using Expected Improvement (EI)
-
+        Calculate the next best sample location using Expected Improvement
+        
         Returns:
             X_next: numpy.ndarray of shape (1,) - next best sample point
-            EI: numpy.ndarray of shape (ac_samples,) - expected improvement
-                of each potential sample in self.X_s
+            EI: numpy.ndarray of shape (ac_samples,) - expected improvement of each potential sample
         """
-        # Prédictions du GP sur la grille X_s
-        mu, sigma = self.gp.predict(self.X_s)      # sigma = variance
-        sigma = np.sqrt(sigma)                     # on passe à l'écart-type
-
-        Y = self.gp.Y
-
-        # Best value observée selon minimise / maximise
+        # Get predictions from GP
+        mu, sigma = self.gp.predict(self.X_s)
+        
+        # Find the best value seen so far
         if self.minimize:
-            Y_best = np.min(Y)
-            # amélioration ajustée par xsi
-            imp = Y_best - mu - self.xsi
+            Y_best = np.min(self.gp.Y)
         else:
-            Y_best = np.max(Y)
-            imp = mu - Y_best - self.xsi
-
-        # Calcul de Z seulement là où sigma > 0
-        Z = np.zeros_like(mu)
-        nonzero = sigma > 0
-        Z[nonzero] = imp[nonzero] / sigma[nonzero]
-
-        # Expected Improvement
-        EI = np.zeros_like(mu)
-        EI[nonzero] = (imp[nonzero] * norm.cdf(Z[nonzero]) +
-                       sigma[nonzero] * norm.pdf(Z[nonzero]))
-
-        # Prochain point = argmax EI
+            Y_best = np.max(self.gp.Y)
+        
+        # Calculate improvement
+        # For minimization: improvement = Y_best - mu
+        # For maximization: improvement = mu - Y_best
+        if self.minimize:
+            improvement = Y_best - mu
+        else:
+            improvement = mu - Y_best
+        
+        # Avoid division by zero
+        with np.errstate(divide='warn'):
+            # Z = (improvement - xsi) / sigma
+            Z = (improvement - self.xsi) / sigma
+            # Expected Improvement = improvement * norm.cdf(Z) + sigma * norm.pdf(Z)
+            EI = improvement * norm.cdf(Z) + sigma * norm.pdf(Z)
+            # Set EI to 0 where sigma is 0 (no uncertainty)
+            EI[sigma == 0.0] = 0.0
+        
+        # Find the point with maximum EI
         X_next = self.X_s[np.argmax(EI)]
-
+        
         return X_next, EI
