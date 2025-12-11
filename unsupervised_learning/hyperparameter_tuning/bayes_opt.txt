@@ -1,0 +1,13 @@
+BAYESIAN OPTIMIZATION REPORT
+==================================================
+Timestamp: 2025-12-10T12:39:14.771509
+Total Iterations: 30
+Best Validation Loss: 0.0047
+
+BEST HYPERPARAMETERS:
+--------------------------------------------------
+Learning Rate: 0.0534
+Units (Layer 1): 32
+Dropout Rate: 0.1754
+L2 Regularization: 0.0000
+Batch Size: 16
