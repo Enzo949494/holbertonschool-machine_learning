@@ -35,6 +35,9 @@ class GaussianProcess:
             numpy.ndarray of shape (m, n) - covariance kernel matrix
         """
         # RBF kernel: sigma_f^2 * exp(-||x1 - x2||^2 / (2 * l^2))
-        sqdist = (np.sum(X1**2, 1).reshape(-1, 1) +
-                  np.sum(X2**2, 1) - 2 * np.dot(X1, X2.T))
+        X1_sq = np.sum(X1**2, axis=1).reshape(-1, 1)
+        X2_sq = np.sum(X2**2, axis=1)
+        cross = 2 * np.dot(X1, X2.T)
+        sqdist = X1_sq + X2_sq - cross
+
         return self.sigma_f**2 * np.exp(-sqdist / (2 * self.l**2))
