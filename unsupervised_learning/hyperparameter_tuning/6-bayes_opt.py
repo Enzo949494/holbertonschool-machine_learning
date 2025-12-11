@@ -1,18 +1,32 @@
 #!/usr/bin/env python3
 """Bayesian Optimization of a Neural Network using GPyOpt"""
 
+import os
+import random
+from datetime import datetime
+
 import numpy as np
 import matplotlib.pyplot as plt
+
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-import tensorflow as tf
+
 from tensorflow import keras
 from tensorflow.keras import layers
-import GPyOpt
+
 from GPyOpt.methods import BayesianOptimization
-import json
-from datetime import datetime
+
+
+# ======================================================================
+# Fixer les seeds pour rendre le script (relativement) déterministe
+# ======================================================================
+SEED = 42
+os.environ["PYTHONHASHSEED"] = str(SEED)
+random.seed(SEED)
+np.random.seed(SEED)
+keras.utils.set_random_seed(SEED)   # fixe tf.random + keras backend [web:89]
+
 
 # Load dataset
 iris = load_iris()
@@ -23,40 +37,39 @@ y = iris.target
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 X_train, X_test, y_train, y_test = train_test_split(
-    X_scaled, y, test_size=0.2, random_state=42
+    X_scaled, y, test_size=0.2, random_state=SEED
 )
 
 # Convert to categorical
 y_train_cat = keras.utils.to_categorical(y_train, 3)
 y_test_cat = keras.utils.to_categorical(y_test, 3)
 
-# Store for convergence tracking
+# Global for best checkpoint & iteration counter
 best_loss = float('inf')
-iteration_count = 0
-losses = []
-iterations = []
+iteration_counter = 0
 
 
 def build_and_train_model(params):
     """
-    Build and train a neural network with given hyperparameters
-    
+    Build and train a neural network with given hyperparameters.
+
     Args:
-        params: array of hyperparameters [learning_rate, units1, dropout, l2_reg, batch_size]
-    
+        params: array of hyperparameters
+                [learning_rate, units1, dropout, l2_reg, batch_size]
+
     Returns:
-        Validation loss (negative for maximization in GPyOpt)
+        Validation loss (to be minimized by GPyOpt)
     """
-    global best_loss, iteration_count, losses, iterations
-    
+    global best_loss, iteration_counter
+
+    iteration_counter += 1
+
     learning_rate = float(params[0][0])
     units1 = int(params[0][1])
     dropout = float(params[0][2])
     l2_reg = float(params[0][3])
     batch_size = int(params[0][4])
-    
-    iteration_count += 1
-    
+
     try:
         # Build model
         model = keras.Sequential([
@@ -75,7 +88,7 @@ def build_and_train_model(params):
             layers.Dropout(dropout),
             layers.Dense(3, activation='softmax')
         ])
-        
+
         # Compile
         optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
         model.compile(
@@ -83,14 +96,14 @@ def build_and_train_model(params):
             loss='categorical_crossentropy',
             metrics=['accuracy']
         )
-        
+
         # Early stopping
         early_stopping = keras.callbacks.EarlyStopping(
             monitor='val_loss',
             patience=10,
             restore_best_weights=True
-        )
-        
+        )  # [web:97]
+
         # Train
         history = model.fit(
             X_train, y_train_cat,
@@ -100,10 +113,10 @@ def build_and_train_model(params):
             callbacks=[early_stopping],
             verbose=0
         )
-        
-        # Evaluate
-        val_loss = min(history.history['val_loss'])
-        
+
+        # Best val_loss during training
+        val_loss = float(min(history.history['val_loss']))
+
         # Save checkpoint if best so far
         if val_loss < best_loss:
             best_loss = val_loss
@@ -111,51 +124,52 @@ def build_and_train_model(params):
                 f"best_model_lr{learning_rate:.4f}_u{units1}_"
                 f"d{dropout:.2f}_l2{l2_reg:.4f}_bs{batch_size}.h5"
             )
-            model.save(checkpoint_name)
-        
-        # Track convergence
-        losses.append(val_loss)
-        iterations.append(iteration_count)
-        
-        print(f"Iteration {iteration_count}: Loss={val_loss:.4f}, "
-              f"LR={learning_rate:.4f}, Units={units1}, "
-              f"Dropout={dropout:.2f}, L2={l2_reg:.4f}, BS={batch_size}")
-        
+            model.save(checkpoint_name)  # [web:93][web:96]
+
+        # Log clair par itération
+        print(
+            f"Iteration {iteration_counter:02d} | "
+            f"Loss={val_loss:.4f}, "
+            f"LR={learning_rate:.4f}, Units={units1}, "
+            f"Dropout={dropout:.2f}, L2={l2_reg:.4f}, BS={batch_size}"
+        )
+
         return val_loss
-    
+
     except Exception as e:
-        print(f"Error in iteration {iteration_count}: {e}")
-        return 1000.0  # Return high loss on error
+        print(f"Iteration {iteration_counter:02d} | Error during evaluation: {e}")
+        # Grande loss pour que BO évite cette zone
+        return 1e3
 
 
-# Define bounds for hyperparameters
+# Define bounds for hyperparameters (5 hyperparams) [web:72]
 bounds = [
-    {'name': 'learning_rate', 'type': 'continuous', 'domain': (0.0001, 0.1)},
-    {'name': 'units', 'type': 'discrete', 'domain': (16, 32, 64, 128)},
-    {'name': 'dropout', 'type': 'continuous', 'domain': (0.0, 0.5)},
+    {'name': 'learning_rate',     'type': 'continuous', 'domain': (0.0001, 0.1)},
+    {'name': 'units',             'type': 'discrete',   'domain': (16, 32, 64, 128)},
+    {'name': 'dropout',           'type': 'continuous', 'domain': (0.0, 0.5)},
     {'name': 'l2_regularization', 'type': 'continuous', 'domain': (0.0, 0.01)},
-    {'name': 'batch_size', 'type': 'discrete', 'domain': (8, 16, 32, 64)}
+    {'name': 'batch_size',        'type': 'discrete',   'domain': (8, 16, 32, 64)}
 ]
 
-# Run Bayesian Optimization
+
+# Run Bayesian Optimization (max 30 iterations) [web:76]
 optimizer = BayesianOptimization(
     f=build_and_train_model,
     domain=bounds,
-    num_cores=1,
     initial_design_numdata=5,
     acquisition_type='EI',
-    exact_feval=True,
+    exact_feval=True
 )
 
-optimizer.run_optimization(max_iter=25, verbosity=False)
+optimizer.run_optimization(max_iter=25, verbosity=True)
 
-# Get best parameters
+# Best parameters from GPyOpt [web:73]
 best_params = optimizer.x_opt
-best_loss_opt = optimizer.fx_opt
+best_loss_opt = float(optimizer.fx_opt)
 
-print("\n" + "="*50)
+print("\n" + "=" * 50)
 print("OPTIMIZATION COMPLETE")
-print("="*50)
+print("=" * 50)
 print(f"Best Loss: {best_loss_opt:.4f}")
 print(f"Best Learning Rate: {best_params[0]:.4f}")
 print(f"Best Units: {int(best_params[1])}")
@@ -163,51 +177,10 @@ print(f"Best Dropout: {best_params[2]:.4f}")
 print(f"Best L2 Regularization: {best_params[3]:.4f}")
 print(f"Best Batch Size: {int(best_params[4])}")
 
-# Generate report
-report = {
-    'timestamp': datetime.now().isoformat(),
-    'total_iterations': iteration_count,
-    'best_loss': float(best_loss_opt),
-    'best_parameters': {
-        'learning_rate': float(best_params[0]),
-        'units': int(best_params[1]),
-        'dropout': float(best_params[2]),
-        'l2_regularization': float(best_params[3]),
-        'batch_size': int(best_params[4])
-    },
-    'optimization_history': {
-        'iterations': iterations,
-        'losses': [float(l) for l in losses]
-    }
-}
+# Save official GPyOpt report [web:73][web:103]
+optimizer.save_report('bayes_opt.txt')
 
-# Save report
-with open('bayes_opt.txt', 'w') as f:
-    f.write("BAYESIAN OPTIMIZATION REPORT\n")
-    f.write("="*50 + "\n")
-    f.write(f"Timestamp: {report['timestamp']}\n")
-    f.write(f"Total Iterations: {report['total_iterations']}\n")
-    f.write(f"Best Validation Loss: {report['best_loss']:.4f}\n\n")
-    f.write("BEST HYPERPARAMETERS:\n")
-    f.write("-"*50 + "\n")
-    f.write(f"Learning Rate: {report['best_parameters']['learning_rate']:.4f}\n")
-    f.write(f"Units (Layer 1): {report['best_parameters']['units']}\n")
-    f.write(f"Dropout Rate: {report['best_parameters']['dropout']:.4f}\n")
-    f.write(f"L2 Regularization: {report['best_parameters']['l2_regularization']:.4f}\n")
-    f.write(f"Batch Size: {report['best_parameters']['batch_size']}\n")
+optimizer.plot_convergence(filename='convergence.png')
 
-# Plot convergence
-plt.figure(figsize=(10, 6))
-plt.plot(iterations, losses, 'b-o', linewidth=2, markersize=6)
-plt.axhline(y=best_loss_opt, color='r', linestyle='--', label=f'Best Loss: {best_loss_opt:.4f}')
-plt.xlabel('Iteration')
-plt.ylabel('Validation Loss')
-plt.title('Bayesian Optimization Convergence')
-plt.grid(True, alpha=0.3)
-plt.legend()
-plt.tight_layout()
-plt.savefig('convergence.png', dpi=100)
-plt.show()
-
-print(f"\nReport saved to 'bayes_opt.txt'")
-print(f"Convergence plot saved to 'convergence.png'")
+print("\nReport saved to 'bayes_opt.txt'")
+print("Convergence plot saved to 'convergence.png'")

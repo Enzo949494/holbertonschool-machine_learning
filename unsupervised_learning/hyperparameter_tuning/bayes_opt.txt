@@ -1,13 +1,33 @@
-BAYESIAN OPTIMIZATION REPORT
-==================================================
-Timestamp: 2025-12-10T12:39:14.771509
-Total Iterations: 30
-Best Validation Loss: 0.0047
+----------------------------- GPyOpt Report file -----------------------------------
+GPyOpt Version 1.2.6
+Date and time:               Thu Dec 11 14:19:30 2025
+Optimization completed:      YES, 30 samples collected.
+Number initial samples:      5 
+Tolerance:                   1e-08.
+Optimization time:           270.03970432281494 seconds.
 
-BEST HYPERPARAMETERS:
---------------------------------------------------
-Learning Rate: 0.0534
-Units (Layer 1): 32
-Dropout Rate: 0.1754
-L2 Regularization: 0.0000
-Batch Size: 16
+-------------------------------- Problem set up ------------------------------------
+Problem name:                no_name
+Problem dimension:           5
+Number continuous variables  3
+Number discrete variables    2
+Number bandits               0
+Noiseless evaluations:       True
+Cost used:                   User defined cost
+Constraints:                  False
+
+------------------------------ Optimization set up ---------------------------------
+Normalized outputs:          True
+Model type:                  GP
+Model update interval:       1
+Acquisition type:            EI
+Acquisition optimizer:       lbfgs
+Acquisition type:            EI
+Acquisition optimizer:       lbfgs
+Evaluator type (batch size): sequential (1)
+Cores used:                  1
+
+--------------------------------- Summary ------------------------------------------
+Value at minimum:            0.03867238
+Best found minimum location:  0.1        16.          0.20021791  0.         64.        
+----------------------------------------------------------------------------------------------
