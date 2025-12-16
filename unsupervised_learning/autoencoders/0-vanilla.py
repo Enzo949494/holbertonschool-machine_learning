@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+Module for creating a vanilla autoencoder.
+"""
 
 import tensorflow.keras as keras
 
