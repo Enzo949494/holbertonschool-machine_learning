@@ -11,7 +11,7 @@ def autoencoder(input_dims, filters, latent_dims):
     Creates a convolutional autoencoder model.
 
     Args:
-        input_dims: tuple of integers containing the dimensions of the model input
+        input_dims: tuple of integers containing dimensions of the model input
         filters: list containing the number of filters for each convolutional
                  layer in the encoder
         latent_dims: tuple of integers containing the dimensions of the
