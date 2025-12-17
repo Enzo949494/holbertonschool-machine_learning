@@ -29,8 +29,8 @@ def autoencoder(input_dims, filters, latent_dims):
 
     # Add convolutional layers with max pooling
     for f in filters:
-        x = keras.layers.Conv2D(f, (3, 3), padding='same', 
-                               activation='relu')(x)
+        x = keras.layers.Conv2D(f, (3, 3), padding='same',
+                                activation='relu')(x)
         x = keras.layers.MaxPooling2D((2, 2), padding='same')(x)
 
     encoder = keras.Model(inputs=inputs, outputs=x)
@@ -39,20 +39,23 @@ def autoencoder(input_dims, filters, latent_dims):
     latent_inputs = keras.Input(shape=latent_dims)
     x = latent_inputs
 
-    # Add convolutional layers with upsampling for all filters except the last
-    for f in reversed(filters[:-1]):
+    # Reverse filters for the decoder
+    rev_filters = list(reversed(filters))
+
+    # All convs (same padding) + upsampling except the second to last conv
+    for f in rev_filters[:-1]:
         x = keras.layers.Conv2D(f, (3, 3), padding='same',
-                               activation='relu')(x)
+                                activation='relu')(x)
         x = keras.layers.UpSampling2D((2, 2))(x)
 
-    # Second to last convolution with valid padding
-    x = keras.layers.Conv2D(filters[-1], (3, 3), padding='valid',
-                           activation='relu')(x)
+    # Second to last convolution with valid padding + upsampling
+    x = keras.layers.Conv2D(rev_filters[-1], (3, 3), padding='valid',
+                            activation='relu')(x)
     x = keras.layers.UpSampling2D((2, 2))(x)
 
     # Last convolution with sigmoid activation and input channels
     outputs = keras.layers.Conv2D(input_dims[-1], (3, 3), padding='same',
-                                 activation='sigmoid')(x)
+                                  activation='sigmoid')(x)
 
     decoder = keras.Model(inputs=latent_inputs, outputs=outputs)
 
