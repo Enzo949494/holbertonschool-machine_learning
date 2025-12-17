@@ -46,7 +46,7 @@ def autoencoder(input_dims, filters, latent_dims):
         x = keras.layers.UpSampling2D((2, 2))(x)
 
     # Second to last convolution with valid padding
-    x = keras.layers.Conv2D(filters[0], (3, 3), padding='valid',
+    x = keras.layers.Conv2D(filters[-1], (3, 3), padding='valid',
                            activation='relu')(x)
     x = keras.layers.UpSampling2D((2, 2))(x)
 
