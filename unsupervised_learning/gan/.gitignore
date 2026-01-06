@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+gan_venv/
