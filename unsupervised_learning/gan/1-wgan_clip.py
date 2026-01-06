@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Wasserstein GAN with Gradient Clipping (WGAN-clip) implementation.
+
+This module implements a Wasserstein GAN that uses weight clipping
+to enforce the Lipschitz constraint on the discriminator.
+"""
 
 import tensorflow as tf
 from tensorflow import keras
@@ -7,9 +13,29 @@ import matplotlib.pyplot as plt
 
 
 class WGAN_clip(keras.Model):
+    """
+    Wasserstein GAN with gradient clipping.
+
+    Uses the Wasserstein distance (Earth-Mover distance) as the loss function
+    and weight clipping to enforce Lipschitz constraints on the discriminator.
+    """
 
     def __init__(self, generator, discriminator, latent_generator,
-                 real_examples, batch_size=200, disc_iter=2, learning_rate=.005):
+                 real_examples, batch_size=200, disc_iter=2,
+                 learning_rate=.005):
+        """
+        Initialize the WGAN with weight clipping.
+
+        Args:
+            generator: Keras model that generates fake samples
+            discriminator: Keras model that classifies real vs fake samples
+            latent_generator: Function that generates random latent vectors
+            real_examples: Tensor of real training examples
+            batch_size: Number of samples per batch (default: 200)
+            disc_iter: Number of discriminator iterations per
+                       generator iteration (default: 2)
+            learning_rate: Learning rate for Adam optimizer (default: 0.005)
+        """
         super().__init__()
 
         self.latent_generator = latent_generator
@@ -53,23 +79,51 @@ class WGAN_clip(keras.Model):
             loss=self.discriminator.loss,
         )
 
-    # generator of fake samples of size batch_size
     def get_fake_sample(self, size=None, training=False):
+        """
+        Generate fake samples using the generator.
+
+        Args:
+            size: Number of samples to generate (default: batch_size)
+            training: Whether to use training mode (default: False)
+
+        Returns:
+            Tensor of generated fake samples
+        """
         if not size:
             size = self.batch_size
         latents = self.latent_generator(size)
         return self.generator(latents, training=training)
 
-    # generator of real samples of size batch_size
     def get_real_sample(self, size=None):
+        """
+        Get a random batch of real samples.
+
+        Args:
+            size: Number of samples to retrieve (default: batch_size)
+
+        Returns:
+            Tensor of real samples
+        """
         if not size:
             size = self.batch_size
         sorted_indices = tf.range(tf.shape(self.real_examples)[0])
         random_indices = tf.random.shuffle(sorted_indices)[:size]
         return tf.gather(self.real_examples, random_indices)
 
-    # overloading train_step()
     def train_step(self, useless_argument):
+        """
+        Perform one training step.
+
+        Trains the discriminator multiple times with weight clipping,
+        then the generator once.
+
+        Args:
+            useless_argument: Unused argument (required by Keras API)
+
+        Returns:
+            Dictionary containing discriminator and generator losses
+        """
 
         # 1) entraîner le discriminateur plusieurs fois
         for _ in range(self.disc_iter):
