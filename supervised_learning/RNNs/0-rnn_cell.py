@@ -1,19 +1,38 @@
 #!/usr/bin/env python3
+"""
+Module implementing a simple RNN cell for recurrent neural networks.
+
+This module contains the RNNCell class which represents a single cell of a
+simple Recurrent Neural Network (RNN) that can process sequential data.
+"""
 
 import numpy as np
 
 
 class RNNCell:
-    """Represents a cell of a simple RNN"""
+    """
+    Represents a cell of a simple RNN.
+
+    A RNN cell processes input data and maintains a hidden state across
+    time steps. It uses tanh activation for the hidden state and softmax
+    for the output.
+
+    Attributes:
+        Wh (numpy.ndarray): Weight matrix concatenated hidden state and input.
+                           Shape: (i + h, h)
+        Wy (numpy.ndarray): Weight matrix for output. Shape: (h, o)
+        bh (numpy.ndarray): Bias for hidden state. Shape: (1, h)
+        by (numpy.ndarray): Bias for output. Shape: (1, o)
+    """
 
     def __init__(self, i, h, o):
         """
-        Initialize RNNCell
+        Initialize a RNN cell.
 
         Args:
-            i: dimensionality of the data
-            h: dimensionality of the hidden state
-            o: dimensionality of the outputs
+            i (int): Dimensionality of the input data.
+            h (int): Dimensionality of the hidden state.
+            o (int): Dimensionality of the outputs.
         """
         self.Wh = np.random.randn(i + h, h)
         self.Wy = np.random.randn(h, o)
@@ -22,15 +41,20 @@ class RNNCell:
 
     def forward(self, h_prev, x_t):
         """
-        Perform forward propagation for one time step
+        Perform forward propagation for one time step.
 
         Args:
-            h_prev: numpy.ndarray of shape (m, h) containing the previous hidden state
-            x_t: numpy.ndarray of shape (m, i) containing the data input for the cell
+            h_prev (numpy.ndarray): Previous hidden state. Shape: (m, h)
+                                   where m is the batch size.
+            x_t (numpy.ndarray): Input data for the current time step.
+                                Shape: (m, i) where m is the batch size.
 
         Returns:
-            h_next: the next hidden state
-            y: the output of the cell
+            tuple: A tuple containing:
+                - h_next (numpy.ndarray): Next hidden state. Shape: (m, h).
+                                         Computed using tanh activation.
+                - y (numpy.ndarray): Output of the cell. Shape: (m, o).
+                                    Computed using softmax activation.
         """
         # Concatenate input and previous hidden state
         concat = np.concatenate((h_prev, x_t), axis=1)
