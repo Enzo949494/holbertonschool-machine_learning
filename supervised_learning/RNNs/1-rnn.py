@@ -30,7 +30,7 @@ def rnn(rnn_cell, X, h_0):
         tuple: A tuple containing:
             - H (numpy.ndarray): All hidden states throughout the sequence.
                                 Shape: (t + 1, m, h)
-                                Includes the initial hidden state h_0 at index 0
+                                Include the initial hidden state h_0 at index 0
             - Y (numpy.ndarray): All outputs throughout the sequence.
                                 Shape: (t, m, o) where o is the output
                                 dimensionality
