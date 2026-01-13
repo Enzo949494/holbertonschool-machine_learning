@@ -79,7 +79,7 @@ class GRUCell:
         h_tilde = np.tanh(np.dot(h_tilde_concat, self.Wh) + self.bh)
 
         # Next hidden state
-        h_next = (1 - z) * h_tilde + z * h_prev
+        h_next = (1 - z) * h_prev + z * h_tilde
 
         # Output with softmax activation
         y = np.dot(h_next, self.Wy) + self.by
