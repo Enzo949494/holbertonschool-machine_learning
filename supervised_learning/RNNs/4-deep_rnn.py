@@ -42,7 +42,7 @@ def deep_rnn(rnn_cells, X, h_0):
             h_next, y = cell.forward(h_prev, x_t)
             h_next_layer[layer] = h_next
 
-            # l'entrée de la couche suivante est la sortie cachée de la couche courante
+            # entrée couche suivante est la sortie cachée de la couche courante
             x_t = h_next
 
         # stocker les états cachés de toutes les couches pour ce pas de temps
