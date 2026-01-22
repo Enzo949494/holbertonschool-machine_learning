@@ -12,6 +12,9 @@ env/
 *.h5
 *.keras
 
+# Zone.Identifier files (Windows metadata)
+*:Zone.Identifier
+
 # Python
 __pycache__/
 *.py[cod]
