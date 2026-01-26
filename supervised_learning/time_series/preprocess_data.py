@@ -49,9 +49,10 @@ def main():
     # Normalise TOUT le dataset
     values_normalized = (values - scaler_mean) / (scaler_std + 1e-6)
     
-    # Sauvegarde UNIQUEMENT les données normalisées (light!)
+    # Sauvegarde les données normalisées ET originales
     np.savez("btc_normalized.npz", 
              data=values_normalized.astype(np.float32),
+             original_data=values.astype(np.float32),
              mean=scaler_mean.astype(np.float32),
              std=scaler_std.astype(np.float32))
     
