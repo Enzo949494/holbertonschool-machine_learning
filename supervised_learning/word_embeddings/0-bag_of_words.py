@@ -8,7 +8,7 @@ def bag_of_words(sentences, vocab=None):
         # Étape 1 : extraire vocabulaire
         all_words = []
         for sentence in sentences:
-            words = re.findall(r'\b\w+\b', sentence.lower())
+            words = re.findall(r'[a-z]+', sentence.lower())
             all_words.extend(words)
         vocab = sorted(set(all_words))
     
@@ -19,7 +19,7 @@ def bag_of_words(sentences, vocab=None):
     
     # Étape 3 : remplir matrice
     for i, sentence in enumerate(sentences):
-        words = re.findall(r'\b\w+\b', sentence.lower())
+        words = re.findall(r'[a-z]+', sentence.lower())
         for word in words:
             if word in vocab:
                 col_idx = vocab.index(word)
