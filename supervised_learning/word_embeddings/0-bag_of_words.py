@@ -15,7 +15,7 @@ def bag_of_words(sentences, vocab=None):
     # Étape 2 : créer matrice
     n_sentences = len(sentences)
     n_features = len(vocab)
-    embeddings = np.zeros((n_sentences, n_features))
+    embeddings = np.zeros((n_sentences, n_features), dtype=int)
     
     # Étape 3 : remplir matrice
     for i, sentence in enumerate(sentences):
