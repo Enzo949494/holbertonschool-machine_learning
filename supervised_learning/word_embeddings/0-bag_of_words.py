@@ -25,4 +25,4 @@ def bag_of_words(sentences, vocab=None):
                 col_idx = vocab.index(word)
                 embeddings[i, col_idx] += 1
     
-    return embeddings, vocab
+    return embeddings, np.array(vocab)
