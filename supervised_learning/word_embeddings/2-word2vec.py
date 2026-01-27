@@ -2,8 +2,6 @@
 """Module for creating and training Word2Vec models."""
 
 import gensim
-import numpy as np
-import random
 
 
 def word2vec_model(sentences, vector_size=100, min_count=5, window=5, 
@@ -24,10 +22,6 @@ def word2vec_model(sentences, vector_size=100, min_count=5, window=5,
     Returns:
         trained Word2Vec model
     """
-    # Fix seeds for reproducibility
-    np.random.seed(seed)
-    random.seed(seed)
-    
     # sg: training architecture
     # sg=0 -> CBOW (Continuous Bag of Words)
     # sg=1 -> Skip-gram
