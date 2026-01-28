@@ -6,10 +6,10 @@ import tensorflow as tf
 
 def gensim_to_keras(model):
     """Converts a gensim word2vec model to a keras Embedding layer.
-    
+
     Args:
         model: trained gensim word2vec model
-    
+
     Returns:
         trainable keras Embedding layer
     """
@@ -17,7 +17,7 @@ def gensim_to_keras(model):
     weights = model.wv.vectors
     vocab_size = len(model.wv)
     embedding_dim = model.wv.vector_size
-    
+
     # Create the Keras Embedding layer with the weights
     embedding_layer = tf.keras.layers.Embedding(
         input_dim=vocab_size,
@@ -25,5 +25,5 @@ def gensim_to_keras(model):
         weights=[weights],
         trainable=True
     )
-    
+
     return embedding_layer
