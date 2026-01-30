@@ -27,12 +27,12 @@ def cumulative_bleu(references, sentence, n):
     bp = (1.0 if sentence_len >= closest_ref_len
           else math.exp(1 - closest_ref_len / sentence_len))
 
-    # Calculate precision for each n-gram size and average them
-    bleu_scores = []
+    # Calculate precision for each n-gram size
+    log_precisions = []
     for i in range(1, n + 1):
         # Return 0 if sentence is too short for n-grams
         if sentence_len < i:
-            bleu_scores.append(0.0)
+            log_precisions.append(0.0)
             continue
 
         # Extract n-grams from the candidate sentence
@@ -56,8 +56,8 @@ def cumulative_bleu(references, sentence, n):
                                 max_ref_counts[ngram])
                             for ngram in sentence_counts)
         precision = clipped_count / len(sentence_ngrams)
-        bleu_scores.append(precision)
+        log_precisions.append(math.log(precision) if precision > 0 else 0)
 
-    # Return cumulative BLEU = brevity penalty × average precision
-    avg_precision = sum(bleu_scores) / n
-    return bp * avg_precision
+    # Return cumulative BLEU = brevity penalty × exp(average log precision)
+    avg_log_precision = sum(log_precisions) / n
+    return bp * math.exp(avg_log_precision)
