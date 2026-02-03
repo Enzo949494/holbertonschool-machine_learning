@@ -5,6 +5,7 @@ import tensorflow as tf
 
 
 class SelfAttention(tf.keras.layers.Layer):
+    """Attention layer."""
     def __init__(self, units):
         super(SelfAttention, self).__init__()
         self.W = tf.keras.layers.Dense(units)
