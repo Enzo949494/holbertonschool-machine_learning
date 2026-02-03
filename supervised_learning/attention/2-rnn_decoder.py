@@ -13,23 +13,27 @@ class RNNDecoder(tf.keras.layers.Layer):
             recurrent_initializer='glorot_uniform'
         )
         self.F = tf.keras.layers.Dense(vocab)
+        # FIX 1: Attention créée UNE SEULE FOIS au init
+        self.attention = SelfAttention(units)
 
     def call(self, x, s_prev, hidden_states):
         # 1. Embed
-        x_emb = self.embedding(x)
+        x_emb = self.embedding(x)  # (32,1,128)
         
-        # 2. Attention
-        attention = SelfAttention(self.gru.units)
-        context, _ = attention(s_prev, hidden_states)
+        # 2. Attention (mêmes poids !)
+        context, _ = self.attention(s_prev, hidden_states)  # (32,256)
         
-        # 3. Concat (reshape x_emb si besoin)
-        concat_input = tf.concat([context, tf.squeeze(x_emb, 1)], axis=-1)
+        # 3. Concat
+        x_emb_squeezed = tf.squeeze(x_emb, 1)  # (32,128)
+        concat_input = tf.concat([context, x_emb_squeezed], axis=-1)  # (32,384)
         
-        # 4. GRU
-        _, s = self.gru(tf.expand_dims(concat_input, 1), initial_state=s_prev)
-
+        # 4. Time dimension
+        concat_input = tf.expand_dims(concat_input, 1)  # (32,1,384)
         
-        # 5. Logits
+        # 5. GRU
+        _, s = self.gru(concat_input, initial_state=s_prev)
+        
+        # 6. Logits
         y = self.F(s)
         
         return y, s
