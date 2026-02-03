@@ -10,7 +10,7 @@ class RNNDecoder(tf.keras.layers.Layer):
         self.embedding = tf.keras.layers.Embedding(vocab, embedding)
         self.gru = tf.keras.layers.GRU(
             units=units,
-            return_sequences=True,
+            return_sequences=False,
             return_state=True,
             recurrent_initializer='glorot_uniform'
         )
@@ -24,15 +24,14 @@ class RNNDecoder(tf.keras.layers.Layer):
         # 2. Attention to get context vector
         context, _ = self.attention(s_prev, hidden_states)  # (32, 256)
         
-        # 3. Concatenate x_emb with context
+        # 3. Concatenate context with x_emb (context first)
         context_exp = tf.expand_dims(context, 1)  # (32, 1, 256)
-        concat_input = tf.concat([x_emb, context_exp], axis=-1)  # (32, 1, 384)
+        concat_input = tf.concat([context_exp, x_emb], axis=-1)  # (32, 1, 384)
         
-        # 4. Pass through GRU without initial state
-        output, s = self.gru(concat_input)  # output:(32,1,256), s:(32,256)
+        # 4. Pass through GRU with initial state
+        output, s = self.gru(concat_input, initial_state=s_prev)  # output:(32,256), s:(32,256)
         
-        # 5. Squeeze output and pass through Dense layer
-        output = tf.squeeze(output, axis=1)  # (32, 256)
+        # 5. Pass GRU output through Dense layer
         y = self.F(output)  # (32, vocab)
         
         return y, s
