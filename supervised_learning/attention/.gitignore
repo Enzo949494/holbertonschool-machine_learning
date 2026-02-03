@@ -5,3 +5,11 @@ attention_venv/
 __pycache__/
 *.py[cod]
 *$py.class
+
+# VS Code
+.vscode/
+
+# MyPy Cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
