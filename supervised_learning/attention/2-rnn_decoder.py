@@ -28,8 +28,8 @@ class RNNDecoder(tf.keras.layers.Layer):
         context_exp = tf.expand_dims(context, 1)  # (32, 1, 256)
         concat_input = tf.concat([x_emb, context_exp], axis=-1)  # (32, 1, 384)
         
-        # 4. Pass through GRU
-        output, s = self.gru(concat_input, initial_state=s_prev)  # output:(32,1,256), s:(32,256)
+        # 4. Pass through GRU without initial state
+        output, s = self.gru(concat_input)  # output:(32,1,256), s:(32,256)
         
         # 5. Squeeze output and pass through Dense layer
         output = tf.squeeze(output, axis=1)  # (32, 256)
