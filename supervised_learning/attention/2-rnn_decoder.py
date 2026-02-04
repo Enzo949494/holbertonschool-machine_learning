@@ -2,6 +2,7 @@
 """RNN Decoder for machine translation"""
 
 import tensorflow as tf
+SelfAttention = __import__('1-self_attention').SelfAttention
 
 
 class RNNDecoder(tf.keras.layers.Layer):
@@ -21,7 +22,7 @@ class RNNDecoder(tf.keras.layers.Layer):
         self.embedding = tf.keras.layers.Embedding(vocab, embedding)
         self.gru = tf.keras.layers.GRU(
             units,
-            return_sequences=True,
+            return_sequences=False,
             return_state=True,
             recurrent_initializer='glorot_uniform'
         )
@@ -40,7 +41,6 @@ class RNNDecoder(tf.keras.layers.Layer):
             y: tensor of shape (batch, vocab) - output word as one-hot vector
             s: tensor of shape (batch, units) - new decoder hidden state
         """
-        SelfAttention = __import__('1-self_attention').SelfAttention
         attention = SelfAttention(s_prev.shape[1])
         
         # Calculate attention context vector
@@ -53,11 +53,8 @@ class RNNDecoder(tf.keras.layers.Layer):
         context = tf.expand_dims(context, 1)
         x = tf.concat([context, x], axis=-1)
         
-        # Pass through GRU
+        # Pass through GRU (output is already 2D with return_sequences=False)
         output, s = self.gru(x, initial_state=s_prev)
-        
-        # Remove sequence dimension
-        output = output[:, -1, :]
         
         # Pass through dense layer
         y = self.F(output)
