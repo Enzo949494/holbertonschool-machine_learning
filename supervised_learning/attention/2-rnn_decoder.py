@@ -27,6 +27,7 @@ class RNNDecoder(tf.keras.layers.Layer):
             recurrent_initializer='glorot_uniform'
         )
         self.F = tf.keras.layers.Dense(vocab)
+        self.attention = SelfAttention(units)
 
     def call(self, x, s_prev, hidden_states):
         """
@@ -41,10 +42,8 @@ class RNNDecoder(tf.keras.layers.Layer):
             y: tensor of shape (batch, vocab) - output word as one-hot vector
             s: tensor of shape (batch, units) - new decoder hidden state
         """
-        attention = SelfAttention(s_prev.shape[1])
-        
         # Calculate attention context vector
-        context, _ = attention(s_prev, hidden_states)
+        context, _ = self.attention(s_prev, hidden_states)
         
         # Embed input word
         x = self.embedding(x)
@@ -53,7 +52,7 @@ class RNNDecoder(tf.keras.layers.Layer):
         context = tf.expand_dims(context, 1)
         x = tf.concat([context, x], axis=-1)
         
-        # Pass through GRU (output is already 2D with return_sequences=False)
+        # Pass through GRU
         output, s = self.gru(x, initial_state=s_prev)
         
         # Pass through dense layer
