@@ -1,37 +1,66 @@
 #!/usr/bin/env python3
+"""RNN Decoder for machine translation"""
 
 import tensorflow as tf
 SelfAttention = __import__('1-self_attention').SelfAttention
 
 
 class RNNDecoder(tf.keras.layers.Layer):
+    """RNN Decoder class"""
+    
     def __init__(self, vocab, embedding, units, batch):
+        """
+        Constructor for RNN Decoder
+        
+        Args:
+            vocab: size of the output vocabulary
+            embedding: dimensionality of the embedding vector
+            units: number of hidden units in the RNN cell
+            batch: batch size
+        """
         super(RNNDecoder, self).__init__()
         self.embedding = tf.keras.layers.Embedding(vocab, embedding)
         self.gru = tf.keras.layers.GRU(
-            units=units,
-            return_sequences=False,
+            units,
+            return_sequences=True,
             return_state=True,
             recurrent_initializer='glorot_uniform'
         )
         self.F = tf.keras.layers.Dense(vocab)
-        self.attention = SelfAttention(units)
 
     def call(self, x, s_prev, hidden_states):
-        # 1. Embedding of input word
-        x_emb = self.embedding(x)  # (32, 1, 128)
+        """
+        Forward pass of the decoder
         
-        # 2. Attention to get context vector
-        context, _ = self.attention(s_prev, hidden_states)  # (32, 256)
+        Args:
+            x: tensor of shape (batch, 1) - previous word index
+            s_prev: tensor of shape (batch, units) - previous decoder hidden state
+            hidden_states: tensor of shape (batch, input_seq_len, units) - encoder outputs
+            
+        Returns:
+            y: tensor of shape (batch, vocab) - output word as one-hot vector
+            s: tensor of shape (batch, units) - new decoder hidden state
+        """
+        # Initialize attention layer
+        attention = SelfAttention(s_prev.shape[1])
         
-        # 3. Concatenate context with x_emb (context first)
-        context_exp = tf.expand_dims(context, 1)  # (32, 1, 256)
-        concat_input = tf.concat([context_exp, x_emb], axis=-1)  # (32, 1, 384)
+        # Calculate attention context vector
+        context, _ = attention(s_prev, hidden_states)
         
-        # 4. Pass through GRU with initial state
-        output, s = self.gru(concat_input, initial_state=s_prev)  # output:(32,256), s:(32,256)
+        # Embed input word
+        x = self.embedding(x)
         
-        # 5. Pass GRU output through Dense layer
-        y = self.F(output)  # (32, vocab)
+        # Concatenate context vector with embedded input (context first)
+        context = tf.expand_dims(context, 1)
+        x = tf.concat([context, x], axis=-1)
+        
+        # Pass through GRU
+        output, s = self.gru(x, initial_state=s_prev)
+        
+        # Remove sequence dimension (since we only have 1 time step)
+        output = tf.squeeze(output, axis=1)
+        
+        # Pass through dense layer to get vocabulary distribution
+        y = self.F(output)
         
         return y, s
