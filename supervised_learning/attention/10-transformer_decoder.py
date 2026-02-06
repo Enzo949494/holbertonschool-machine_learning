@@ -2,7 +2,7 @@
 """
 Transformer Decoder Implementation
 
-This module implements a transformer decoder that stacks multiple decoder blocks
+This module implements a transformer decoder that stacks multiple decoder block
 with embeddings and positional encodings to process target sequences while
 attending to encoder outputs.
 """
