@@ -2,8 +2,9 @@
 """
 Transformer Network Implementation
 
-This module implements a complete transformer model combining an encoder and decoder
-for sequence-to-sequence tasks with self-attention mechanisms.
+This module implements a complete transformer model combining
+an encoder and decoder for sequence-to-sequence tasks with
+self-attention mechanisms.
 """
 
 import tensorflow as tf
@@ -47,7 +48,7 @@ class Transformer(tf.keras.Model):
         """
         Forward pass of the transformer.
 
-        Encodes the input sequence and decodes to produce target sequence logits.
+        Encodes the input sequence and decode to produce target sequence logit.
 
         Args:
             inputs (tf.Tensor): Input tensor of shape (batch, input_seq_len)
