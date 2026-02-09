@@ -1,0 +1,49 @@
+# Virtual environments
+TRANSO_APPS_VENV/
+venv/
+env/
+
+# Mypy cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+
+# TensorFlow datasets
+.keras/
+datasets/
+tensorflow_datasets/
+*.tfrecord
+*.tfrecord.gz
