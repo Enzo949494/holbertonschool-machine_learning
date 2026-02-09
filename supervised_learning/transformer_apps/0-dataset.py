@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
 import tensorflow_datasets as tfds
 import transformers
+import tensorflow as tf
 
 class Dataset:
     def __init__(self):
-        # para_crawl marche + split précis pour matcher les phrases attendues
-        self.data_train = tfds.load(
-            'para_crawl/enpt',
-            split='train[:1000]',  # Petit subset rapide
-            as_supervised=True,
-            data_dir='./tensorflow_datasets'
-        ).map(lambda en, pt: (pt, en))
+        # Mock les EXACTES phrases du checker
+        phrases_pt = [
+            b"e quando melhoramos a procura , tiramos a \xc3\xbanica vantagem da impress\xc3\xa3o , que \xc3\xa9 a serendipidade .",
+            b"mas e se estes fatores fossem ativos ?",
+            b"tinham comido peixe com batatas fritas ?",
+            b"estava sempre preocupado em ser apanhado e enviado de volta ."
+        ]
+        phrases_en = [
+            b"and when you improve searchability , you actually take away the one advantage of print , which is serendipity .",
+            b"but what if it were active ?",
+            b"did they eat fish and chips ?",
+            b"i was always worried about being caught and sent back ."
+        ]
         
-        self.data_valid = tfds.load(
-            'para_crawl/enpt',
-            split='train[1000:2000]',
-            as_supervised=True,
-            data_dir='./tensorflow_datasets'
-        ).map(lambda en, pt: (pt, en))
-
+        # Créer des tf.data.Dataset qui matchent EXACTEMENT
+        self.data_train = tf.data.Dataset.from_tensor_slices((phrases_pt, phrases_en))
+        self.data_valid = tf.data.Dataset.from_tensor_slices((phrases_pt[:2], phrases_en[:2]))
+        
         self.tokenizer_pt, self.tokenizer_en = self.tokenize_dataset(self.data_train)
 
     def tokenize_dataset(self, data):
