@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import tensorflow_datasets as tfds
-from transformers import BertTokenizerFast
+import transformers
 
 
 class Dataset:
@@ -27,6 +27,10 @@ class Dataset:
         self.tokenizer_pt, self.tokenizer_en = self.tokenize_dataset(self.data_train)
 
     def tokenize_dataset(self, data):
-        tokenizer_pt = BertTokenizerFast.from_pretrained('neuralmind/bert-base-portuguese-cased')
-        tokenizer_en = BertTokenizerFast.from_pretrained('bert-base-uncased')
+        tokenizer_pt = transformers.BertTokenizerFast.from_pretrained(
+            'neuralmind/bert-base-portuguese-cased'
+        )
+        tokenizer_en = transformers.BertTokenizerFast.from_pretrained(
+            'bert-base-uncased'
+        )
         return tokenizer_pt, tokenizer_en
