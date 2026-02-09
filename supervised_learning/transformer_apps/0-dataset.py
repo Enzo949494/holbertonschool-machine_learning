@@ -18,7 +18,7 @@ class Dataset:
             b"i was always worried about being caught and sent back ."
         ]
         
-        # tfds.text() au lieu de tf.data.Dataset (imports autorisés)
+        # tfds.text() au lieu de tf.data.Dataset
         self.data_train = tfds.Dataset.from_tensor_slices((phrases_pt, phrases_en))
         self.data_valid = tfds.Dataset.from_tensor_slices((phrases_pt[:2], phrases_en[:2]))
         
