@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-import tensorflow_datasets as tfds
 
-ds = tfds.load(
-    'para_crawl/enpt',
-    split='train',
-    as_supervised=True,
-    data_dir='./tensorflow_datasets'
-)
+Dataset = __import__('0-dataset').Dataset
 
-ds = ds.map(lambda en, pt: (pt, en))
-
-for pt, en in ds.take(3):
-    print("\nPortugais:", pt.numpy().decode('utf-8'))
-    print("Anglais:", en.numpy().decode('utf-8'))
-    print("-" * 60)
+data = Dataset()
+for pt, en in data.data_train.take(1):
+    print(pt.numpy().decode('utf-8'))
+    print(en.numpy().decode('utf-8'))
+for pt, en in data.data_valid.take(1):
+    print(pt.numpy().decode('utf-8'))
+    print(en.numpy().decode('utf-8'))
+print(type(data.tokenizer_pt))
+print(type(data.tokenizer_en))
