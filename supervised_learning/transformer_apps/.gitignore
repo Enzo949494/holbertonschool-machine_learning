@@ -3,6 +3,9 @@ TRANSO_APPS_VENV/
 venv/
 env/
 
+# Manual downloads
+my_manual_downloads/
+
 # Mypy cache
 .mypy_cache/
 .dmypy.json
