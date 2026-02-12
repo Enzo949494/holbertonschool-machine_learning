@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
+import tensorflow_datasets as tfds
+import os
 
-Dataset = __import__('0-dataset').Dataset
+manual_dir = 'my_manual_downloads'
+download_config = tfds.download.DownloadConfig(manual_dir=manual_dir)
 
-data = Dataset()
-for pt, en in data.data_train.take(1):
+data, info = tfds.load(
+    'ted_hrlr_translate/pt_to_en',
+    with_info=True,
+    as_supervised=True,
+    download_and_prepare_kwargs={'download_config': download_config}
+)
+
+print("Dataset préparé !")
+print(f"Splits: {info.splits}")
+
+for pt, en in data['train'].take(1):
     print(pt.numpy().decode('utf-8'))
     print(en.numpy().decode('utf-8'))
-for pt, en in data.data_valid.take(1):
-    print(pt.numpy().decode('utf-8'))
-    print(en.numpy().decode('utf-8'))
-print(type(data.tokenizer_pt))
-print(type(data.tokenizer_en))
