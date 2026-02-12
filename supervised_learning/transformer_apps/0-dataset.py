@@ -4,8 +4,10 @@ import transformers
 
 class Dataset:
     def __init__(self):
-        self.data_train = tfds.load('ted_hrlr_translate/pt_to_en', split='train', as_supervised=True)
-        self.data_valid = tfds.load('ted_hrlr_translate/pt_to_en', split='validation', as_supervised=True)
+        manual_dir = 'my_manual_downloads'
+        download_config = tfds.download.DownloadConfig(manual_dir=manual_dir)
+        self.data_train = tfds.load('ted_hrlr_translate/pt_to_en', split='train', as_supervised=True, download_and_prepare_kwargs={'download_config': download_config})
+        self.data_valid = tfds.load('ted_hrlr_translate/pt_to_en', split='validation', as_supervised=True, download_and_prepare_kwargs={'download_config': download_config})
         self.tokenizer_pt, self.tokenizer_en = self.tokenize_dataset(self.data_train)
 
     def tokenize_dataset(self, data):
