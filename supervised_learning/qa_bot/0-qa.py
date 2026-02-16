@@ -86,7 +86,19 @@ def question_answer(question, reference):
                 best_start = start
                 best_end = end
     
+    # Ajouter un threshold de confiance
+    # Convertir les logits en probas pour avoir une confiance
+    start_probs = np.exp(start_logits) / np.sum(np.exp(start_logits))
+    end_probs = np.exp(end_logits) / np.sum(np.exp(end_logits))
+    
     if best_start is None or best_end is None:
+        return None
+    
+    # Confiance = produit des probabilités start et end
+    confidence = start_probs[best_start] * end_probs[best_end]
+    
+    # Threshold minimum - rejeter si trop peu confiant
+    if confidence < 0.02:
         return None
     
     start_idx = best_start
