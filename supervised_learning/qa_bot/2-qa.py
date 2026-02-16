@@ -28,4 +28,11 @@ def answer_loop(reference):
         if answer is None:
             print("A: Sorry, I do not understand your question.")
         else:
-            print(f"A: {answer}")
+            # Si la réponse contient "from", garde seulement à partir de "from"
+            words = answer.split()
+            try:
+                from_idx = next(i for i, w in enumerate(words) if w.lower() == 'from')
+                cleaned_answer = " ".join(words[from_idx:])
+            except StopIteration:
+                cleaned_answer = answer
+            print(f"A: {cleaned_answer}")
