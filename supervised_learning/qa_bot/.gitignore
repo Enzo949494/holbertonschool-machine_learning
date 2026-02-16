@@ -1,0 +1,37 @@
+# Virtual Environment
+QA_BOT_VENV/
+venv/
+env/
+*.venv
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Data and Logs
+*.log
+*.zip
+__MACOSX/
+ZendeskArticles/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
