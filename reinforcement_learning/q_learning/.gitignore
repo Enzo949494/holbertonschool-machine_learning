@@ -49,6 +49,7 @@ MANIFEST
 htmlcov/
 .tox/
 .hypothesis/
+.mypy_cache/
 
 # Jupyter Notebook
 .ipynb_checkpoints
