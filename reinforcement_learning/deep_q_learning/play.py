@@ -6,7 +6,7 @@ import gymnasium as gym
 from gymnasium.wrappers import AtariPreprocessing
 from tensorflow.keras.optimizers.legacy import Adam
 from rl.agents.dqn import DQNAgent
-from rl.policy import EpsGreedyQPolicy
+from rl.policy import GreedyQPolicy
 from rl.memory import SequentialMemory
 from train import NumpyObservation, build_model, FixWrappers
 
@@ -25,7 +25,7 @@ input_shape = (84, 84)
 model = build_model(input_shape, nb_actions)
 
 memory = SequentialMemory(limit=500000, window_length=4)
-policy = EpsGreedyQPolicy(eps=0.05)
+policy = GreedyQPolicy()
 
 dqn = DQNAgent(
     model=model,

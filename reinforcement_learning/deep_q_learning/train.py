@@ -21,6 +21,7 @@ class FixWrappers(gym.Wrapper):
     def step(self, action):
         obs, reward, terminated, truncated, info = self.env.step(action)
         done = terminated or truncated
+        reward = reward / 10.0  # Normaliser les récompenses
         return obs, reward, done, info
 
     def render(self, mode=None, **kwargs):
