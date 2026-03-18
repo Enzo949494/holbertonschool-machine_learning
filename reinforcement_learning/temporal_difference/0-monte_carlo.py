@@ -2,8 +2,8 @@
 """Module pour l'estimation d'une fonction de valeur par Monte Carlo.
 
 Ce module implémente l'algorithme de Monte Carlo pour l'apprentissage par
-renforcement (RL). Il estime la fonction de valeur d'états dans un environnement
-en utilisant une politique donnée.
+renforcement (RL). Il estime la fonction de valeur d'états
+dans un environnement en utilisant une politique donnée.
 """
 
 import numpy as np
