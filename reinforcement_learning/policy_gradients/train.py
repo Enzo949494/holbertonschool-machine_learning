@@ -9,7 +9,7 @@ import numpy as np
 policy_gradient = __import__('policy_gradient').policy_gradient
 
 
-def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
+def train(env, nb_episodes, alpha=0.000045, gamma=0.98, show_result=False):
     """
     Train a policy gradient agent using Monte-Carlo returns.
 
@@ -45,6 +45,10 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
         episode_gradients = []
         episode_rewards = []
         terminated = False
+        
+		# Rendu visuel tous les 1000 épisodes si show_result=True
+        if show_result and episode % 1000 == 0:
+            env.render()
 
         # -- Phase 1 : jouer un épisode complet --
         while not terminated:
@@ -55,6 +59,10 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
             episode_rewards.append(reward)
             state = new_state
             terminated = terminated or truncated
+            
+			# Rendu à chaque step de l'épisode affiché
+            if show_result and episode % 1000 == 0:
+                env.render()
 
         # -- Phase 2 : calculer les retours cumulés (Monte-Carlo) --
         G = 0
