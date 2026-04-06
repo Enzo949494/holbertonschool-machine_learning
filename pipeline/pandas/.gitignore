@@ -1,0 +1,4 @@
+*.csv
+*.csv:Zone.Identifier
+__pycache__/
+.mypy_cache/
