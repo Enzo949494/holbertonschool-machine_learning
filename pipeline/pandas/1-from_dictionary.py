@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Module for creating pandas DataFrames from dictionaries.
+
+This module demonstrates how to create a pandas DataFrame from a dictionary
+with specified index labels and multiple columns.
+"""
 
 import pandas as pd
 
