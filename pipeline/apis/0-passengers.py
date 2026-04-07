@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Module that returns the list of ships that can hold a given number of passengers"""
+"""Module that returns the list of ships that
+   can hold a given number of passengers
+"""
 import requests
 
 
 def availableShips(passengerCount):
-    """Returns list of ship names that can hold at least passengerCount passengers"""
+    """Returns list of ship names that
+       can hold at least passengerCount passengers
+    """
     ships = []
     url = "https://swapi-api.hbtn.io/api/starships/"
 
