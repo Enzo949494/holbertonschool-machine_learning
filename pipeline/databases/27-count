@@ -1,0 +1,2 @@
+// display number of docs in collectio
+db.school.count()
