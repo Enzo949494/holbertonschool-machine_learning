@@ -1,0 +1,2 @@
+// lists aal docs in db
+db.school.find()
