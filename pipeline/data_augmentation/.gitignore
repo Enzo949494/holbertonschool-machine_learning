@@ -1,0 +1,12 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Mypy cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Virtual environment
+DATA_AUGMENTATION/
